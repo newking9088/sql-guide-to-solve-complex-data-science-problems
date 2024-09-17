@@ -1,2 +1,2 @@
 # sql-guide-to-solve-complex-data-science-problems
-This is a comprehensive SQL guide for both MySQL users and PostgreSQL users, covering topics from basic `SELECT` statements to advanced window functions. My SQL learning journey and the suggestions from my mentees, colleagues and seniors to document this were the motivations to write this document.
+This comprehensive SQL guide caters to both MySQL and PostgreSQL users, covering everything from basic SELECT statements to advanced window functions. My own SQL learning journey, along with encouragement from my mentees, colleagues, and seniors, inspired me to create this document.
