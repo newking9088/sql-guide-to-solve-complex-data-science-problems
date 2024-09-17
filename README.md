@@ -30,5 +30,8 @@ Sometimes, SQL queries can become long and complex, especially when dealing with
 
 In data science, calculating running totals, cumulative sums, and identifying top performers are common tasks. Window functions are incredibly powerful for these purposes. They allow you to perform calculations across a set of table rows that are related to the current row. Functions like `ROW_NUMBER()`, `RANK()`, and `SUM()` over a window partition are invaluable for advanced data analysis.
 
-Investing time in learning these SQL concepts is a pathway to success in data science. Mastering `GROUP BY`, joins, CTEs, and window functions will significantly enhance your ability to manage and analyze data efficiently. These skills not only make your work easier but also enable you to derive deeper insights and make more informed decisions.
+Investing time in learning these SQL concepts is a pathway to success in data science. Mastering `GROUP BY`, joins, CTEs, and window functions will significantly enhance your ability to manage and analyze data efficiently. These skills not only make your work easier but also enable you to derive deeper insights and make more informed decisions. 
+
+**Enjoy your learning journey and best of luck! Please follow along with the `how_to_sql.md` guide.**
+
 
