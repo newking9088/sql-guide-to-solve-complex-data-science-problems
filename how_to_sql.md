@@ -483,6 +483,8 @@ WHERE log_date >= NOW() - INTERVAL 1 DAY;
 
 ## Common Functions (PostgreSQL and MySQL)
 
+<img src="https://github.com/newking9088/sql-guide-to-solve-complex-data-science-problems/blob/main/figures/Visual_SQL_JOINS.jpg" alt="Visual SQL JOINS">
+
 ### INNER JOIN
 Only rows matching `customer_id` values in both tables will be returned.
 ```sql
@@ -1286,7 +1288,7 @@ If the `another_value is zero`, it returns `NULL` else returns `another_value`.
 1. It is unnecessary, could impact performance negatively, or when the data is already unique.
 
 ## DON'T Dos
-<span style="color:red">** SELECT column1, DISTINCT column2 FROM table;**</span>
+<span style="color:red">**SELECT column1, DISTINCT column2 FROM table;**</span>
 
 ## Slecting unique combination of two columns
 Let’s say you have a table `employees` with columns `department` and `job_title`. You want to `find unique combinations of departments and job titles`.
