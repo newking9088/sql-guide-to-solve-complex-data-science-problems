@@ -269,7 +269,7 @@ In SQL, indexing starts from 1, unlike in Python, which starts from 0. `SUBSTRIN
     ```
 
 ### Stripping White Spaces or Specified Characters
-This is equivalatent to `strip()`, 'rstrip()` and `lstrip()` methods in Python.
+This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
 - `TRIM()`, `RTRIM()`, `LTRIM()`, `BTRIM()`
   - Syntax: `TRIM([LEADING | TRAILING | BOTH] [characters] FROM string)`
   - Example:
