@@ -197,7 +197,9 @@ The order in which SQL performs the query is different from the query structure.
 
 <span style="color:green;">***The way we write SQL queries is quite different from how SQL query operations are executed. It’s crucial to understand and remember the SQL query structure and the order of operation flow, as this knowledge is essential when writing SQL queries later on.***</span>
 
-I will discuss the syntax of the most commonly used data manipulation commands, data types, and other essential SQL concepts.
+I will discuss the syntax of the most commonly used data manipulation commands, data types, and other essential SQL concepts. 
+
+**Note: Everything written after `--` is a comment and will not be executed as SQL code.**
 
 ## Topic 1: String Manipulation
 
@@ -207,14 +209,14 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
 - `CONCAT()` or `||`
   - Example:
     ```sql
-    SELECT 'Raj' || ' ' || 'Paudel' AS full_name;
-    SELECT CONCAT('Raj', ' Paudel') AS full_name;
+    SELECT 'Raj' || ' ' || 'Paudel' AS full_name; -- Raj Paudel
+    SELECT CONCAT('Raj', ' Paudel') AS full_name; -- Raj Paudel
     ```
   - `CONCAT()` is more versatile and powerful than `||`, introduced in PostgreSQL 9.1 and above.
   - Example:
     ```sql
-    SELECT CONCAT('Raj', NULL); -- 'Raj'
-    SELECT 'Raj' || NULL; -- NULL
+    SELECT CONCAT('Raj', NULL); -- 'Raj',  MySQL will result `NULL`
+    SELECT 'Raj' || NULL; -- `NULL`, both PostgreSQL and MySQL will result `NULL`
     ```
 
 ### Replace
@@ -227,6 +229,7 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
     UPDATE post
     SET url = REPLACE(url, 'http', 'https');
     ```
+`post` is the table name and we want to set `http` values in column `url` to `https`.
 
 ### Regular Expressions
 - `REGEXP_REPLACE(source, pattern, replacement_string [, flags])`
@@ -242,7 +245,7 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
   - `_`: Matches any single character.
   - Example:
     ```sql
-    SELECT * FROM products WHERE code ILIKE 'A%';
+    SELECT * FROM products WHERE code ILIKE 'A%'; --only available in PostgreSQL.
     ```
 
 ### Substring Extraction
@@ -251,9 +254,10 @@ In SQL, indexing starts from 1, unlike in Python, which starts from 0. `SUBSTRIN
 - `SUBSTRING()`, `LEFT()`, `RIGHT()`
   - Example:
     ```sql
-    SELECT SUBSTRING('PostgreSQL', 2, 4); -- 'ostg'
-    SELECT LEFT('PostgreSQL', 4); -- 'Post'
-    SELECT RIGHT('PostgreSQL', 4); -- 'eSQL'
+    SELECT SUBSTRING('PostgreSQL', 2, 4); -- 'ostg', starting at index 2 retrieve 4 characters
+    SELECT SUBSTRING('PostgreSQL', 2); -- 'ostgreSQL', everything after starting from index 2
+    SELECT LEFT('PostgreSQL', 4); -- 'Post', retrieve 4 characters starting from left
+    SELECT RIGHT('PostgreSQL', 4); -- 'eSQL', retrieve 4 characters starting from right
     ```
 
 ### Length of a String
@@ -265,6 +269,7 @@ In SQL, indexing starts from 1, unlike in Python, which starts from 0. `SUBSTRIN
     ```
 
 ### Stripping White Spaces or Specified Characters
+This is equivalatent to `strip()`, 'rstrip()` and `lstrip()` methods in Python.
 - `TRIM()`, `RTRIM()`, `LTRIM()`, `BTRIM()`
   - Syntax: `TRIM([LEADING | TRAILING | BOTH] [characters] FROM string)`
   - Example:
@@ -286,31 +291,6 @@ In SQL, indexing starts from 1, unlike in Python, which starts from 0. `SUBSTRIN
   - Example:
     ```sql
     SELECT REVERSE('Raj'); -- 'jaR'
-    ```
-
-## PostgreSQL Specific Functions
-
-### Split Part
-- `SPLIT_PART(string, delimiter, field_index)`
-  - Example:
-    ```sql
-    SELECT SPLIT_PART('newking@gmail.com', '@', 1); -- 'newking'
-    ```
-### Title (First letter is upper case and rest are lower case)
-- `INITCAP(string)`
-- Example:
-    ```sql
-    SELECT INITCAP('raj'); -- 'Raj'
-    ```
-
-### String Aggregation
-- `STRING_AGG(column, delimiter [ORDER BY column])`
-  - Used to concatenate strings in `GROUP BY`.
-  - Example:
-    ```sql
-    SELECT STRING_AGG(name, ', ') AS names 
-    FROM employees
-    GROUP BY department;
     ```
 
 ## MySQL Specific Functions
@@ -339,6 +319,30 @@ MySQL doesn’t have an `INITCAP()` function like PostgreSQL databases. Instead,
     SELECT CONCAT(UPPER(SUBSTRING('rAj', 1, 1)), LOWER(SUBSTRING('rAj', 2))); -- 'Raj'
     ```
 
+## PostgreSQL Specific Functions
+
+### Split Part
+- `SPLIT_PART(string, delimiter, field_index)`
+  - Example:
+    ```sql
+    SELECT SPLIT_PART('newking@gmail.com', '@', 1); -- 'newking'
+    ```
+### Title (First letter is upper case and rest are lower case)
+- `INITCAP(string)`
+- Example:
+    ```sql
+    SELECT INITCAP('raj'); -- 'Raj'
+    ```
+
+### String Aggregation
+- `STRING_AGG(column, delimiter [ORDER BY column])`
+  - Used to concatenate strings in `GROUP BY`.
+  - Example:
+    ```sql
+    SELECT STRING_AGG(name, ', ') AS names 
+    FROM employees
+    GROUP BY department;
+    ```
 
 ## Topic 2: Date and Time Functions
 
@@ -346,7 +350,7 @@ MySQL doesn’t have an `INITCAP()` function like PostgreSQL databases. Instead,
 
 ### Current Date and Time
 - `NOW()` - Returns the current date and time.
-- `CURRENT_DATE` - Returns the current date in `YYYY-MM-DD` (`%Y-%m-%d`) format.
+- `CURRENT_DATE` - Returns the current date in `YYYY-MM-DD` (`%Y-%m-%d`) format. '%y' means year in two digits.
 - `CURRENT_TIME` - Returns the current time.
 - `CURRENT_TIMESTAMP` - Returns the current date and time.
 
