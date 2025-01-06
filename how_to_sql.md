@@ -1279,7 +1279,7 @@ Operates on physical row positions.
 
 - **ROWS BETWEEN n PRECEDING AND CURRENT ROW**:  Includes a specified number of rows `n` before the current row and the current row.
 
-- **ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING**: ncludes the current row and a specified number of rows after the current row.
+- **ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING**: Includes the current row and a specified number of rows after the current row.
 
  Operates on logical values (e.g., dates, numeric ranges).
 
