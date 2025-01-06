@@ -6,17 +6,57 @@ categories: blog
 author: Nawaraj Paudel, PhD
 ---
 
-## Introduction
+# SQL Guide - Table of Contents
 
+## Introduction and Fundamentals
+* [Introduction](#introduction)
+* [Why Learn SQL](#why-learn-sql)
+* [Platforms to Learn SQL](#platforms-to-learn-sql)
+* [Relational Databases](#relational-databases)
+* [SQL Statements and Syntax](#sql-statements-and-syntax)
+
+## Core Topics
+* [String Manipulation](#string-manipulation)
+   * [Common Functions](#common-functions-postgresql-and-mysql)
+   * [MySQL Specific Functions](#mysql-specific-functions)
+   * [PostgreSQL Specific Functions](#postgresql-specific-functions)
+
+* [Date and Time Functions](#date-and-time-functions)
+   * [Common Functions](#common-functions-postgresql-and-mysql-1)
+   * [MySQL Specific Functions](#mysql-specific-functions-1)
+   * [PostgreSQL Specific Functions](#postgresql-specific-functions-1)
+
+* [JOINS](#topic-3-joins)
+   * [Common JOIN Types](#common-functions-postgresql-and-mysql-2)
+   * [MySQL Specific JOINs](#mysql-specific-functions-2)
+   * [PostgreSQL Specific JOINs](#postgresql-specific-functions-2)
+
+* [Aggregations and Grouping](#aggregations-and-grouping)
+* [Subqueries & Nested Queries](#subqueries--nested-queries)
+* [Common Table Expressions (CTEs)](#common-table-expressions-ctes)
+* [Window Functions](#window-functions)
+* [Conditional Statements](#conditional-statements)
+* [Handling NULL Values](#handling-null-values)
+* [DISTINCT Clause](#distinct-clause)
+* [SQL Logical Operators](#sql-logical-operators)
+
+## Practice Problems
+* [Easy Questions](#easy-questions)
+* [Medium Questions](#medium-questions)
+* [Hard Questions](#hard-questions)
+
+## Introduction and Fundamentals
+
+### Introduction
 Structured Query Language (SQL) is a powerful language for relational databases. It enables users to efficiently manage and manipulate data stored in relational database management systems (RDBMS). SQL is a must learn for Data Analyst, Data Scientist, Data Engineer and Machine Learning Engineer. We will provide `PostgreSQL`- specific commands when they differ from `MySQL`, while prioritizing the use of MySQL commands that are compatible with both databases whenever possible.
 
-## Why Learn SQL?
+### Why Learn SQL?
 
 - **Data Management**: SQL is essential for managing and manipulating data in relational databases.
 - **Career Opportunities**: Proficiency in SQL is highly valued in many industries, including tech, finance, and healthcare.
 - **Data Analysis**: SQL is a fundamental skill for data analysts and data scientists.
 
- ## Platforms to Learn SQL
+ ### Platforms to Learn SQL
 
 1. **LeetCode**: Offers a comprehensive SQL study plan with 50 essential SQL questions for free.
    - [LeetCode SQL Study Plan](https://leetcode.com/studyplan/top-sql-50/)
@@ -42,7 +82,7 @@ Structured Query Language (SQL) is a powerful language for relational databases.
 7. **Udemy**: Offers a variety of SQL courses for different skill levels.
    - [Udemy SQL Courses](https://www.udemy.com/)
 
-## Relational Databases
+### Relational Databases
 
 There are many ways of storing data on a computer (text files, JSON files, CSV files, spreadsheets, etc.). A relational database is a data storage system with the following properties:
 
@@ -54,7 +94,7 @@ There are many ways of storing data on a computer (text files, JSON files, CSV f
 6. **Information can be retrieved from the databases using SQL** (Structured Query Language).
 7. **Databases can be hosted locally** (on your computer) or on the cloud for distributed access.
 
-## Relational Database Software
+Following are some of the popular relational databases:
 
 - MySQL
 - PostgreSQL
@@ -64,7 +104,7 @@ There are many ways of storing data on a computer (text files, JSON files, CSV f
 - Oracle
 - IBM DB2
 
-## SQL Statements and Syntax
+### SQL Statements and Syntax
 
 ```mermaid
 graph TD
@@ -106,7 +146,7 @@ graph TD
     class E,E1,E2,E3,E4,E5 tcl
 ```
 
-### Data Definition Language (DDL)
+#### Data Definition Language (DDL)
 - Modifies the actual structure of a database rather than its content.
 - Used for creating, altering, and deleting database objects.
 
@@ -117,7 +157,7 @@ graph TD
   - `RENAME`: Changes the name of an existing database object.
   - `COMMENT`: Adds comments to the data dictionary for a database object.
 
-### Data Manipulation Language (DML)
+#### Data Manipulation Language (DML)
 - Allows you to manipulate the database's content.
 - Used for searching, inserting, updating, and deleting data.
 
@@ -127,7 +167,7 @@ graph TD
   - `UPDATE`: Modifies existing data within a table.
   - `DELETE`: Removes data from a table.
 
-### Data Control Language (DCL)
+#### Data Control Language (DCL)
 - Manages user access rights to the database.
 
   Commands:
@@ -135,7 +175,7 @@ graph TD
   - `REVOKE`: Removes previously granted privileges from users.
   - `LOCK`: Controls concurrency by locking a table or rows.
 
-### Transaction Control Language (TCL)
+#### Transaction Control Language (TCL)
 - Helps manage the changes made by DML commands.
 
   Commands:
@@ -145,7 +185,7 @@ graph TD
   - `CALL`: Executes a procedure or function.
   - `EXPLAIN`: Provides execution plan details of a SQL statement.
 
-## SQL Data Types
+#### SQL Data Types
 ```mermaid
 graph TD
     A[SQL Data Types] --> B(Numeric)
@@ -161,11 +201,11 @@ graph TD
     F --> F1[BOOLEAN]
 ```
 
-## Exploring Data Manipulation Language (DML)
+#### Exploring Data Manipulation Language (DML)
 
 We will primarily focus on Data Manipulation Language (DML) as it is the key area for SQL and most of the learning. This focus is particularly important because data scientists, machine learning engineers, and data analysts frequently use DML in their day-to-day work.
 
-## SELECT
+**SELECT**
 The `SELECT` statement is used to query data from a table. This is the most important command we will use in DML.
 ```sql
 SELECT * FROM table_name; -- '*' means all columns (all table content)
@@ -173,7 +213,7 @@ SELECT * FROM table_name; -- '*' means all columns (all table content)
 SELECT 2; -- It prints out 2 in the console
 ```
 
-### INSERT
+**INSERT**
 The `INSERT` statement is used to add new rows to a table and we cab add multiple rows at once.
 
 ```sql
@@ -183,7 +223,7 @@ VALUES
         (value1, value2, value3);
 ```
 
-### UPDATE
+**UPDATE**
 The `UPDATE` statement is used to modify existing rows in a table. If you want to apply the CASE-based update to ALL rows in the table, you don't need a WHERE clause. You can use **CASE** for conditional updates. The syntax goes like `UPDATE`, `SET`, conditionals such as `WHERE`, `CASE`, `IF` as shown in example below:
 
 ```sql
@@ -200,7 +240,7 @@ END
 WHERE condition;
 ```
 
-### DELETE
+**DELETE**
 The DELETE statement is used to remove existing rows from a table.
 
 ```sql
@@ -208,7 +248,7 @@ DELETE FROM table_name
 WHERE condition;
 ```
 
-## SQL Query Construction and Execution Sequence
+#### SQL Query Construction and Execution Sequence
 
 ```mermaid
 graph TD
@@ -248,11 +288,12 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
 
 **Note: Everything written after `--` is a comment and will not be executed as SQL code.**
 
-## Topic 1: String Manipulation
+## Core Topics
+### String Manipulation
 
-## Common Functions (PostgreSQL and MySQL)
+#### Common Functions (PostgreSQL and MySQL)
 
-### Concatenation
+##### Concatenation
 - `CONCAT()` or `||`
   - Example:
     ```sql
