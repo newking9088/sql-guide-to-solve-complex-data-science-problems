@@ -66,77 +66,102 @@ There are many ways of storing data on a computer (text files, JSON files, CSV f
 
 ## SQL Statements and Syntax
 
+```mermaid
+graph TD
+    A[SQL Commands]
+    A --> B[Data Definition Language DDL]
+    A --> C[Data Manipulation Language DML]
+    A --> D[Data Control Language DCL]
+    A --> E[Transaction Control Language TCL]
+    
+    B --> B1[1 -> CREATE]
+    B1 --> B2[2 -> DROP]
+    B2 --> B3[3 -> DELETE]
+    B3 --> B4[4 -> RENAME]
+    B4 --> B5[5 -> COMMENT]
+    
+    C --> C1[1 -> SELECT]
+    C1 --> C2[2 -> INSERT]
+    C2 --> C3[3 -> UPDATE]
+    C3 --> C4[4 -> DELETE]
+    
+    D --> D1[1 -> GRANT]
+    D1 --> D2[2 -> REVOKE]
+    D2 --> D3[3 -> LOCK]
+    
+    E --> E1[1 -> COMMIT]
+    E1 --> E2[2 -> ROLLBACK]
+    E2 --> E3[3 -> SAVEPOINT]
+    E3 --> E4[4 -> CALL]
+    E4 --> E5[5 -> EXPLAIN]
+
+    classDef ddl fill:#ff9999
+    classDef dml fill:#99ff99
+    classDef dcl fill:#9999ff
+    classDef tcl fill:#ffff99
+    
+    class B,B1,B2,B3,B4,B5 ddl
+    class C,C1,C2,C3,C4 dml
+    class D,D1,D2,D3 dcl
+    class E,E1,E2,E3,E4,E5 tcl
+```
+
 ### Data Definition Language (DDL)
 - Modifies the actual structure of a database rather than its content.
 - Used for creating, altering, and deleting database objects.
 
   Commands:
-  - `CREATE`
-  - `DROP`
-  - `DELETE`
-  - `RENAME`
-  - `COMMENT`
+  - `CREATE`: Creates a new table, view, or other database object.
+  - `DROP`: Deletes an existing database object like a table or view.
+  - `ALTER`: Modifies the structure of an existing database object.
+  - `RENAME`: Changes the name of an existing database object.
+  - `COMMENT`: Adds comments to the data dictionary for a database object.
 
 ### Data Manipulation Language (DML)
 - Allows you to manipulate the database's content.
 - Used for searching, inserting, updating, and deleting data.
 
   Commands:
-  - `SELECT`
-  - `INSERT`
-  - `UPDATE`
-  - `DELETE`
+  - `SELECT`: Retrieves data from the database.
+  - `INSERT`: Adds new rows of data to a table.
+  - `UPDATE`: Modifies existing data within a table.
+  - `DELETE`: Removes data from a table.
 
 ### Data Control Language (DCL)
 - Manages user access rights to the database.
 
   Commands:
-  - `GRANT`
-  - `REVOKE`
-  - `LOCK`
+  - `GRANT`: Provides specific privileges to users.
+  - `REVOKE`: Removes previously granted privileges from users.
+  - `LOCK`: Controls concurrency by locking a table or rows.
 
 ### Transaction Control Language (TCL)
 - Helps manage the changes made by DML commands.
 
   Commands:
-  - `COMMIT`
-  - `ROLLBACK`
-  - `SAVEPOINT`
-  - `CALL`
-  - `EXPLAIN`
+  - `COMMIT`: Saves all transactions to the database.
+  - `ROLLBACK`: Reverts the database to the last committed state.
+  - `SAVEPOINT`: Sets a savepoint within a transaction to which you can later rollback.
+  - `CALL`: Executes a procedure or function.
+  - `EXPLAIN`: Provides execution plan details of a SQL statement.
 
 ## SQL Data Types
+```mermaid
+graph TD
+    A[SQL Data Types] --> B(Numeric)
+    A --> C(Date/Time)
+    A --> D(String) 
+    A --> E(Binary)
+    A --> F(Misc)
 
-### Numeric Data Types
-- **INT**: INT, INTEGER, BIGINT, SMALLINT
-- **DECIMAL**: DECIMAL(P, S) where P is the precision and S is the scale.
-- **FLOAT**: FLOAT, REAL, DOUBLE PRECISION
-- **NUMERIC**: NUMERIC(P, S) - similar to DECIMAL, it stores exact numeric values.
-- **TINYINT**, **SMALLINT**, **INT**, **BIGINT**
-- **DECIMAL**, **NUMERIC**, **FLOAT**
+    B --> B1[INT<br/>INTEGER<br/>BIGINT<br/>SMALLINT<br/>TINYINT<br/>DECIMAL<br/>NUMERIC<br/>FLOAT<br/>REAL<br/>DOUBLE PRECISION]
+    C --> C1[DATE<br/>TIME<br/>DATETIME<br/>TIMESTAMP<br/>YEAR]
+    D --> D1[CHAR<br/>VARCHAR<br/>VARCHAR MAX<br/>TEXT<br/>NCHAR<br/>NVARCHAR]
+    E --> E1[BINARY<br/>VARBINARY]    
+    F --> F1[BOOLEAN]
+```
 
-### Date and Time Data Types
-- **DATE**
-- **TIME**
-- **DATETIME**
-- **TIMESTAMP**
-- **YEAR**
-
-### String Data Types
-- **CHAR**
-- **VARCHAR**
-- **VARCHAR(MAX)**
-- **TEXT**
-- **UNICODE CHARACTER/STRING**: NCHAR, NVARCHAR
-
-### Binary Data Types
-- **BINARY**
-- **VARBINARY**
-
-### Miscellaneous Data Types
-- **BOOLEAN**
-
-## Data Manipulation Language (DML)
+## Exploring Data Manipulation Language (DML)
 
 We will primarily focus on Data Manipulation Language (DML) as it is the key area for SQL and most of the learning. This focus is particularly important because data scientists, machine learning engineers, and data analysts frequently use DML in their day-to-day work.
 
@@ -159,7 +184,7 @@ VALUES
 ```
 
 ### UPDATE
-The `UPDATE` statement is used to modify existing rows in a table. You can use **CASE** for conditional updates. The syntax goes like `UPDATE`, `SET`, conditionals such as `WHERE`, `CASE`, `IF` as shown in example below:
+The `UPDATE` statement is used to modify existing rows in a table. If you want to apply the CASE-based update to ALL rows in the table, you don't need a WHERE clause. You can use **CASE** for conditional updates. The syntax goes like `UPDATE`, `SET`, conditionals such as `WHERE`, `CASE`, `IF` as shown in example below:
 
 ```sql
 UPDATE table_name 
@@ -183,19 +208,41 @@ DELETE FROM table_name
 WHERE condition;
 ```
 
-## SQL Query Structure Flow
+## SQL Query Construction and Execution Sequence
 
-**`SELECT -> DISTINCT -> FROM -> JOIN -> WHERE -> GROUP BY -> HAVING -> ORDER BY -> LIMIT -> OFFSET`**
+```mermaid
+graph TD
+    A[Sequence of SQL Code Construction and Logical Order]
+    A --> B[Sequence of Construction]
+    A --> C[Sequence of Logical Order]
+    
+    B --> B1[1 -> SELECT]:::different
+    B1 --> B2[2 -> DISTINCT]:::different
+    B2 --> B3[3 -> FROM]
+    B3 --> B4[4 -> JOIN]
+    B4 --> B5[5 -> WHERE]
+    B5 --> B6[6 -> GROUP BY]
+    B6 --> B7[7 -> HAVING]
+    B7 --> B8[8 -> ORDER BY]
+    B8 --> B9[9 -> LIMIT]
+    B9 --> B10[10 -> OFFSET]
+    
+    C --> C1[1 -> FROM]
+    C1 --> C2[2 -> JOIN]
+    C2 --> C3[3 -> WHERE]
+    C3 --> C4[4 -> GROUP BY]
+    C4 --> C5[5 -> HAVING]
+    C5 --> C6[6 -> SELECT]:::different
+    C6 --> C7[7 -> DISTINCT]:::different
+    C7 --> C8[8 -> ORDER BY]
+    C8 --> C9[9 -> LIMIT]
+    C9 --> C10[10 -> OFFSET]
 
-When you write a SQL query, this is the order you follow. FROM and JOIN have same order of precedence.
+    classDef different fill:#ff9999
+    classDef default fill:#fff
+```
 
-## SQL Order of Operation Flow
-
-The order in which SQL performs the query is different from the query structure. The SQL query order of operation follows:
-
-**`FROM -> JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> DISTINCT -> ORDER BY -> LIMIT -> OFFSET`**
-
-<span style="color:green;">***The way we write SQL queries is quite different from how SQL query operations are executed. It’s crucial to understand and remember the SQL query structure and the order of operation flow, as this knowledge is essential when writing SQL queries later on.***</span>
+<span style="color:green;">Writing SQL queries differs significantly from the logical order in which SQL query operations are executed. It's important to understand and remember the SQL query structure and logical order of operations, as this knowledge is essential for writing effective SQL queries. The logical order does not necessarily match the execution order, as query optimizers may rearrange operations for better performance, such as executing the WHERE clause before the JOIN clause.</span>
 
 I will discuss the syntax of the most commonly used data manipulation commands, data types, and other essential SQL concepts. 
 
@@ -275,6 +322,26 @@ This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
   - Example:
     ```sql
     SELECT BTRIM('  PostgreSQL  '); -- 'PostgreSQL'
+    
+    -- Scenario: Ensuring data consistency after migrating from a legacy system
+    -- Example legacy data:
+    -- ' John ', 'Doe  ', '  JOHN.DOE@EXAMPLE.COM  '
+    -- Output: 'John', 'Doe', 'john.doe@example.com'
+    UPDATE new_customers
+    SET 
+	  first_name = TRIM(first_name),
+	  last_name = TRIM(last_name),
+	  email = LOWER(TRIM(email))
+
+    -- Scenario: Searching for products using user-entered codes with optional prefixes/suffixes
+    -- Example user input:
+    -- 'x123x'
+    -- 'X123'
+    -- '123X'
+    -- Output: Returns products with code '123', ignoring the optional 'X' prefix/suffix
+    SELECT *
+    FROM products
+    WHERE TRIM(BOTH 'X' FROM UPPER(code)) = TRIM(BOTH 'X' FROM UPPER(:user_code));
     ```
 
 ### Upper and Lower Case
@@ -298,18 +365,20 @@ This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
 ### Split Part
 - `SUBSTRING_INDEX(string, delimiter, number)`
   - Example:
+    -- start from left/ right (1/-1) and stop when we encounter '@'
     ```sql
     SELECT SUBSTRING_INDEX('newking@gmail.com', '@', 1); -- 'newking'
+    SELECT SUBSTRING_INDEX('newking@gmail.com', '@', -1); -- 'gmail.com'
     ```
 
 ### String Aggregation
-- `GROUP_CONCAT(column, delimiter [ORDER BY column])`
+- `GROUP_CONCAT(column [ORDER BY] column SEPARATOR [delimiter])`
   - Used to concatenate strings in `GROUP BY`.
   - Example:
     ```sql
-    SELECT GROUP_CONCAT(name, ', ') AS names 
-    FROM employees
-    GROUP BY department;
+    SELECT pub_id, GROUP_CONCAT(DISTINCT cate_id ORDER BY cate_id ASC SEPARATOR ' ') AS categories
+    FROM book_mast
+    GROUP BY pub_id;
     ```
 
 ### Title (First letter is upper case and rest are lower case)
@@ -349,34 +418,44 @@ MySQL doesn’t have an `INITCAP()` function like PostgreSQL databases. Instead,
 ## Common Functions (PostgreSQL and MySQL)
 
 ### Current Date and Time
-- `NOW()` - Returns the current date and time.
-- `CURRENT_DATE` - Returns the current date in `YYYY-MM-DD` (`%Y-%m-%d`) format. '%y' means year in two digits.
-- `CURRENT_TIME` - Returns the current time.
-- `CURRENT_TIMESTAMP` - Returns the current date and time.
+Aside from NOW(), the following functions can be used with or without parentheses at the end.
+- `NOW()` - Returns the current date and time `YYYY-MM-DD %H:%i:%s`.
+- `CURRENT_DATE()` - Returns the current date in `YYYY-MM-DD` (`%Y-%m-%d`) format. '%Y' means year in four digits and '%y' means year in two digits.
+- `CURRENT_TIME()` - Returns the current time in `%H:%i:%s`.
+- `CURRENT_TIMESTAMP()` - Returns the current date and time `%Y-%m-%d %H:%i:%s`.
 
 ### Extracting Parts of a Date/Time
-`EXTRACT(field FROM source)` - Extracts a part of the date/time given date/time is in `'%Y/%m/%d` (separator could be `-` as well) format and it is a `DATETIME` object not a string, if string returns `NULL`. For example, `SELECT EXTRACT(MONTH FROM '2018-02-28')` returns `NULL`.
-  - Example: `SELECT EXTRACT(DAY FROM NOW());`
+`EXTRACT(field FROM source)` - Extracts a specific part of a `DATETIME` value. The date/time must be in the format '%Y/%m/%d' (or use '-' as a separator) and must be a `DATETIME` object. If the source is a string, it returns NULL. 
+For example, 
+  - `SELECT EXTRACT(MONTH FROM '2018-02-28')`; returns `NULL`.
+  - `SELECT EXTRACT(QUARTER FROM NOW());` returns current quarter from today's date.
 
 ### Using Intervals
-Both MySQL and PostgreSQL support interval arithmetic, but there is a slight difference in syntax. In PostgreSQL, the unit of the interval is enclosed in quotes.
+Both MySQL and PostgreSQL support interval arithmetic, but their syntax is slightly different. 
+In PostgreSQL, the unit of the interval is enclosed in quotes.
 
-- `INTERVAL quantity unit` - Adds or subtracts intervals. Please note there is no quotation marks after `INTERVAL` for `quantity unit` in `MySQL` unlike `PostgreSQL`.
-  - Example: `SELECT NOW() + INTERVAL 1 DAY;`
-  - Example: `SELECT NOW() - INTERVAL 1 DAY;`
+- `INTERVAL quantity unit` - Adds or subtracts intervals. Please note there are no quotation marks after `INTERVAL` for `quantity unit` in `MySQL` unlike `PostgreSQL`.
+  - MySQL Example: `SELECT NOW() + INTERVAL 1 DAY;`
+  - MySQL Example: `SELECT NOW() - INTERVAL 1 DAY;`
+  - PostgreSQL Example: `SELECT NOW() + INTERVAL '1 DAY';`
+  - PostgreSQL Example: `SELECT NOW() - INTERVAL '1 DAY';`
 
 
 ## MySQL Specific Functions
 
 ### Truncating Dates
-- `DATE_FORMAT(date, format)` - Formats the date to a specified precision.
+- `DATE_FORMAT(date, format)` - Formats the date to a specified precision where the date can be either a string or a datetime object.
   - Example: 
     - `SELECT DATE_FORMAT(NOW(), '%Y-%m-01');` (Truncates to the first day of the month)
     - `SELECT DATE_FORMAT(NOW(), '%Y-%m');` (Removes day part from the date)
 
 ### Extracting Date Parts
-MySQL is much flexible in that it automatically recognizes str date as datetime object if the date is in the format `%Y-%m-%d` format. 
+"MySQL is highly flexible, as it can automatically recognize string dates as DATETIME objects when they are in the `%Y-%m-%d` format. 
 
+- Extract the quarter
+    ```sql
+    SELECT QUARTER('2023-09-05') AS quarter;
+    ```
 - Extract the month
     ```sql
     SELECT MONTH('2023-09-05') AS month;
@@ -432,10 +511,9 @@ MySQL is much flexible in that it automatically recognizes str date as datetime 
 
 
 ### Calculating Date Differences
-- `TIMESTAMPDIFF(unit, datetime_expr1, datetime_expr2)` - Calculates the difference between two dates. This is equivalent to `EXTRACT(EPOCH FROM datetime_expr1 - datetime_expr2)` and converting the `EPOCH in seconds` to desired unit. Make sure datetime_expr1 and datetime_expr2
-are explicit date time object in PostgreSQL.
-
-  - Example: `SELECT TIMESTAMPDIFF(YEAR, '1992-06-25 05:15:37', NOW());`
+- `TIMESTAMPDIFF(unit, datetime_expr1, datetime_expr2)` - Calculates the difference between two dates. This is equivalent to `EXTRACT(EPOCH FROM datetime_expr1 - datetime_expr2)` and converting the `EPOCH in seconds` to desired unit. Make sure datetime_expr1 and datetime_expr2 are explicit date time object in PostgreSQL.
+ - Example: `SELECT TIMESTAMPDIFF(YEAR, '1992-06-25 05:15:37', NOW());` where the datetime string should be in the same format as `NOW()`.
+   
 - We can also use `DATE_ADD()` and `DATE_SUB()` with `INTERVAL quantity unit`. Note the syntax difference: PostgreSQL is flexible using `INTERVAL '10 DAYS'` or `INTERVAL '10 DAY'`.
 
   - Example: `SELECT DATE_ADD('2024-08-01', INTERVAL 10 DAY) AS new_date;`
@@ -471,7 +549,7 @@ are explicit date time object in PostgreSQL.
   - Example: `SELECT NOW() + INTERVAL '1 DAY';`
 
 ### Generating Series
-- `GENERATE_SERIES(start, stop, step)` - Generates a series of values. Note it must be `6 DAYS` noy `6 DAY` in the following example.
+- `GENERATE_SERIES(start, stop, step)` - Generates a series of values. Note it must be `6 DAYS` not `6 DAY` in the following example.
   - Example: `SELECT GENERATE_SERIES(NOW(), NOW() + INTERVAL '6 DAYS', '1 DAY');`
 
 ## Example Queries
@@ -572,7 +650,7 @@ WHERE customers.status = 'active';
 ```
 
 ### UNION
-If tables have the same structure (same number of columns, same names and same orderof columns) and you want to stack their rows on top of each other (removing duplicates by default), you can use `UNION`.
+If tables have the same structure (same number of columns, same names and same order of columns) and you want to stack their rows on top of each other (removing duplicates by default), you can use `UNION`.
 ```sql
 SELECT employee_id, name, department
 FROM employees
@@ -804,9 +882,9 @@ When you need to calculate aggregates for a group, use `GROUP BY` clause. The `G
 
 - **GROUP BY**: Aggregating data into groups.
 - **HAVING**: Filtering groups after aggregation.
-- **Aggregate functions**: `SUM()`, `COUNT()`, `AVG()`, `MIN()`, `MAX()`, `STDEV()`, `STDEVP()`, `STRING_AGG() or GROUP_AGG()`
+- **Aggregate functions**: `SUM()`, `COUNT()`, `AVG()`, `MIN()`, `MAX()`, `STDEV()`, `STDEVP()`, `GROUP_CONCAT()`
 
-**Order of Operations:**
+**SQL Query Logical Order**
 1. `FROM` + `JOIN` -- Join tables if you have `JOIN`
 2. `WHERE` -- filtering rows before aggregation
 3. `GROUP BY` -- Aggregating data into groups
@@ -814,8 +892,8 @@ When you need to calculate aggregates for a group, use `GROUP BY` clause. The `G
 5. `SELECT` -- Select data/ Window functions happen here
 6. `DISTINCT` -- Select only distinct/unique values
 7. `ORDER BY`  -- Order the result by column(s), default ASC
-8. `LIMIT` -- How many rows we want to retrieve
-9. `OFFSET` -- Which row should we start retrieving data from
+8. `LIMIT` -- How many rows do we want to retrieve?
+9. `OFFSET` -- Which row should we start retrieving data from?
 
 For the following sales data, calculate the total sales for each Location.
 
@@ -832,7 +910,7 @@ For the following sales data, calculate the total sales for each Location.
 | Chicago     | Tablet  | 320.00 |
 | Chicago     | Laptop  | 1250.00|
 
-Lets put together `Price` of products for each `Location` which is called grouping. The table after `GROUP BY` Location looks like this:
+Let's put together the `Price` of products for each `Location` which is called grouping. The table after the `GROUP BY` Location looks like this:
 | Location    | Price  |
 |-------------|--------|
 | Chicago     | 1150.00|
@@ -845,7 +923,7 @@ Lets put together `Price` of products for each `Location` which is called groupi
 |             | 300.00 |
 |             | 1300.00|
 
-Now we can do aggregation for each Location like total sales, average sales, max sales, min sales etc. The table below shows table for total sales for each location.
+Now, we can do aggregation for each Location like total sales, average sales, max sales, min sales, etc. The table below shows table for total sales for each location.
 
 | Location    | Total Sales |
 |-------------|-------------|
@@ -866,14 +944,14 @@ FROM Sales
 GROUP BY Location
 HAVING SUM(Price) > 2610;
 ```
-I will leave it up to you to figure out why I used `SUM(Price) > 2610` instead of `'Total Sales' > 2610` after `HAVING`. The answer lies in understanding the order of operations. The result of above query is shown below:
+I will leave it up to you to figure out why I used `SUM(Price) > 2610` instead of `'Total Sales' > 2610` after `HAVING`. The answer lies in understanding the SQL query's logical order. The result of the above query is shown below:
 
 | Location    | Total Sales |
 |-------------|-------------|
 | Chicago     | 2670.00     |
 | New York    | 2800.00     |
 
-If we want `Product` column in `GROUP BY` result can we do the following?
+If we want `Product` column in `GROUP BY` result, can we do the following?
 ```sql
 -- Wrong Query
 SELECT Location, Product, SUM(Price) AS 'Total Sales'
@@ -888,7 +966,7 @@ SELECT Location, Product, SUM(Price) AS 'Total Sales'
 FROM Sales
 GROUP BY Location, Product;
 ```
-The result of above query looks like:
+The result of the above query looks like this:
 
 | Location    | Product | Total Sales |
 |-------------|---------|-------------|
@@ -904,7 +982,7 @@ The result of above query looks like:
 - The `GROUP BY` clause is used to aggregate data into groups based on **one or more columns**.
 - It **must be accompanied by an aggregate function** such as SUM(), COUNT(), AVG(), MIN(), MAX() or GROUP_CONCAT().
 - We can only `select columns` that are in `GROUP BY` clause.
-- Use `WHERE` clause to filter data before `GROUP BY` and `HAVING` to filter groups based on aggregate result after `GROUP BY`.
+- Use `WHERE` clause to filter data before `GROUP BY` and `HAVING` to filter groups based on aggregate results after `GROUP BY`.
 
  
 ## Topic 5: SUBQUERIES & NESTED QUERIES
@@ -920,6 +998,9 @@ SELECT customer_id, customer_name,
      WHERE orders.customer_id = customers.customer_id) AS order_count
 FROM customers;
 ```
+The outer query selects the `customer_id` and `customer_name` from the customer's table. For each row in the customers table, the correlated subquery is executed.
+This query effectively performs a kind of "loop" over the customers table, matching each customer with their respective orders in the orders table and counting the number of orders for each customer. The correlated subquery allows you to perform this count operation within the context of each individual customer, providing the order count for each customer in the result set.
+
 **Note**: `COUNT(*)` counts `NULL` values as well but `COUNT(col_name)` counts only `NON NULL` values in the column.
 
 ### Example 2: Subquery in `WHERE` Clause
@@ -952,7 +1033,7 @@ WHERE o.avg_order_amount > (
 );
 ```
 ### Example 4: Correlated Subqueries
-Finding employees with salaries above their department average. Assume a table employees.
+Finding employees with salaries above their department average. Assume a table of employees. In the given SQL query, the subquery is considered a correlated subquery because it references a column from the outer query, creating a dependency between the inner and outer queries. 
 ```sql
 SELECT employee_id, employee_name, salary
 FROM employees e
@@ -962,7 +1043,17 @@ WHERE salary > (
     WHERE department_id = e.department_id
 );
 ```
-Note in `WHERE` clause, the column from inner query (or subquery) table `employees` is on left side and outer query table `employees e` column is on the right side. The setup `WHERE department_id = e.department_id` ensures that the subquery is executed for each row in the outer query, using the value of e.department_id from the current row of the outer query. This creates a correlation between the outer and inner queries, making the subquery dependent on the outer query.
+The subquery references the `department_id` column from the outer query's `employees` table aliased as `e`, establishing a correlation between the subquery and the outer query.
+
+In the `WHERE` clause of the subquery:
+- The column `department_id` from the inner query (subquery) is on the left side.
+- The column `e.department_id` from the outer query's `employees` table is on the right side.
+
+The condition `WHERE department_id = e.department_id` ensures that:
+- The subquery is executed for each row in the outer query.
+- The value of `e.department_id` from the current row of the outer query is used in the subquery.
+
+This creates a correlation between the outer and inner queries, making the subquery dependent on the outer query.
 
 ### Example 5: Using Subqueries with EXISTS and NOT EXISTS
 `EXISTS` and `NOT EXISTS` are SQL keywords used to check for the existence of rows returned by a subquery. They are often used in `WHERE` clauses to conditionally filter rows based on whether the subquery returns any result.
@@ -978,6 +1069,10 @@ WHERE EXISTS (
     AND i.paid = false
 );
 ```
+If the subquery finds even a single matching row, the `EXISTS` condition is satisfied, and the corresponding row from the outer query is included in the result.
+`EXISTS` is efficient because it stops searching the moment it finds the first match. It doesn't waste time looking for more matches.
+
+It's useful when you just need to know if a customer has any unpaid invoices, returning their id and name. However, if a customer has multiple unpaid invoices and you want to analyze each one individually, EXISTS won't work well. It's not designed to return all the matching details or rows from the invoices. In that case, you'd need to use a different approach, like a join or a subquery that returns the actual invoice rows for further analysis.
 
 ## TOPIC 6: COMMON TABLE EXPRESSIONS (CTEs)
 
@@ -1174,7 +1269,7 @@ CASE
 END;
 ```
 
-We can also create multiple columns from a given condition using CASE (like pivoting a table):
+We can also create multiple columns from a given condition using CASE (like pivoting a table). This creates a wider table from long table:
 
 ```sql
 CASE WHEN (condition) THEN <value> END AS col_1
@@ -1184,7 +1279,30 @@ CASE WHEN (condition) THEN <value> END AS col_m
 ;
 ```
 
-If using `CASE` with `GROUP BY`, do not forget to use aggregate function. Let’s say you have a table sales with columns salesperson, region, and sales_amount. You want to categorize the sales amounts into ‘High’, ‘Medium’, and ‘Low’ categories and then calculate the total sales for each category.
+To create a long table from a wider table, we could use `UNION`. The example for pivot and unpivot is shown below:
+```sql
+-- pivoted_data converts long table to wide table
+WITH pivoted_data AS (
+    SELECT 
+        region,
+        COUNT(CASE WHEN category = 'Electronics' THEN 1 END) as Electronics_Count,
+        COUNT(CASE WHEN category = 'Clothing' THEN 1 END) as Clothing_Count,
+        COUNT(CASE WHEN category = 'Books' THEN 1 END) as Books_Count
+    FROM products
+    GROUP BY region
+)
+-- converts wide table to long table
+SELECT region, 'Electronics' as category, Electronics_Count as count
+FROM pivoted_data
+UNION ALL
+SELECT region, 'Clothing', Clothing_Count
+FROM pivoted_data
+UNION ALL
+SELECT region, 'Books', Books_Count
+FROM pivoted_data;
+```
+
+If using `CASE` with `GROUP BY`, do not forget to use the aggregate function. Let’s say you have a table sales with columns salesperson, region, and sales_amount. You want to categorize the sales amounts into ‘High’, ‘Medium’, and ‘Low’ categories and then calculate the total sales for each category.
 
 ### Nested CASE
 
