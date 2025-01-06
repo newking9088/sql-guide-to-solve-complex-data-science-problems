@@ -1529,6 +1529,17 @@ WHERE
 GROUP BY
     COALESCE(category, 'unknown');
 ```
+
+However, if we do `COALESCE(column1, column2, column3, 0)`, it works differently as shown in the example below:
+
+| column1 | column2 | column3 | result | Explanation                                    |
+|---------|---------|---------|--------|------------------------------------------------|
+| NULL    | NULL    | NULL    | 0      | All columns NULL, so uses default value (0)    |
+| NULL    | 5       | NULL    | 5      | First non-NULL value is in column2             |
+| NULL    | NULL    | 77      | 77     | First non-NULL value is in column3             |
+| 10      | NULL    | NULL    | 10     | First non-NULL value is in column1             |
+
+
 #### IFNULL(expression1, expression2) works only for MySQL like COALESCE() 
 
 **Description**: Returns `NULL` if the two expressions are equal; otherwise, returns the either of `expression1 or expression2` whichever is not `NULL`. If both values are not `NULL`, returns first value.
