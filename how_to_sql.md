@@ -17,19 +17,19 @@ author: Nawaraj Paudel, PhD
 
 ## Core Topics
 * [String Manipulation](#string-manipulation)
-   * [Common Functions](#common-functions-postgresql-and-mysql)
+   * [Common Functions](#common-functions)
    * [MySQL Specific Functions](#mysql-specific-functions)
    * [PostgreSQL Specific Functions](#postgresql-specific-functions)
 
 * [Date and Time Functions](#date-and-time-functions)
-   * [Common Functions](#common-functions-postgresql-and-mysql-1)
-   * [MySQL Specific Functions](#mysql-specific-functions-1)
-   * [PostgreSQL Specific Functions](#postgresql-specific-functions-1)
+   * [Date and Time Common Functions](#date-and-time-common-functions)
+   * [Date and Time MySQL Specific Functions](#date-and-time-mysql-specific-functions)
+   * [Date and Time PostgreSQL Specific Functions](#date-and-time-postgresql-specific-functions)
 
-* [JOINS](#topic-3-joins)
-   * [Common JOIN Types](#common-functions-postgresql-and-mysql-2)
-   * [MySQL Specific JOINs](#mysql-specific-functions-2)
-   * [PostgreSQL Specific JOINs](#postgresql-specific-functions-2)
+* [JOINS](#joins)
+   * [Common JOIN Types](#common-join-types)
+   * [MySQL Specific JOINs](#mysql-specific-joins)
+   * [PostgreSQL Specific JOINs](#postgresql-specific-joins)
 
 * [Aggregations and Grouping](#aggregations-and-grouping)
 * [Subqueries & Nested Queries](#subqueries--nested-queries)
@@ -291,7 +291,8 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
 ## Core Topics
 ### String Manipulation
 
-#### Common Functions (PostgreSQL and MySQL)
+#### Common Functions 
+These functions are common to both MySQL and PostgreSQL.
 
 ##### Concatenation
 - `CONCAT()` or `||`
@@ -307,7 +308,7 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
     SELECT 'Raj' || NULL; -- `NULL`, both PostgreSQL and MySQL will result `NULL`
     ```
 
-### Replace
+##### Replace
 - `REPLACE(source, from_text, to_text)`
   - `source`: Input string you want to replace.
   - `from_text`: Substring you want to search and replace. If `from_text` appears multiple times in `source`, it will replace all occurrences.
@@ -319,7 +320,7 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
     ```
 `post` is the table name and we want to set `http` values in column `url` to `https`.
 
-### Regular Expressions
+##### Regular Expressions
 - `REGEXP_REPLACE(source, pattern, replacement_string [, flags])`
   - `pattern`: POSIX regular expression.
   - Example:
@@ -327,7 +328,7 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
     SELECT REGEXP_REPLACE('abc', 'a.c', 'xyz'); -- 'xyz'
     ```
 
-### Pattern Matching
+##### Pattern Matching
 - `LIKE` vs `ILIKE` (case insensitive)
   - `%`: Matches any sequence of characters.
   - `_`: Matches any single character.
@@ -336,7 +337,7 @@ I will discuss the syntax of the most commonly used data manipulation commands, 
     SELECT * FROM products WHERE code ILIKE 'A%'; --only available in PostgreSQL.
     ```
 
-### Substring Extraction
+##### Substring Extraction
 In SQL, indexing starts from 1, unlike in Python, which starts from 0. `SUBSTRING('PostgreSQL', 2, 4)` means starting from index 2, retrieve 4 characters.
 
 - `SUBSTRING()`, `LEFT()`, `RIGHT()`
@@ -348,7 +349,7 @@ In SQL, indexing starts from 1, unlike in Python, which starts from 0. `SUBSTRIN
     SELECT RIGHT('PostgreSQL', 4); -- 'eSQL', retrieve 4 characters starting from right
     ```
 
-### Length of a String
+##### Length of a String
 - `LENGTH()`: Counts spaces as well. If you want to remove spaces from a string and then measure its length, you can replace the spaces with an empty string and use the LENGTH() function in SQL.
   - Example:
     ```sql
@@ -356,7 +357,7 @@ In SQL, indexing starts from 1, unlike in Python, which starts from 0. `SUBSTRIN
     SELECT CHARACTER_LENGTH('PostgreSQL is cool'); -- 18
     ```
 
-### Stripping White Spaces or Specified Characters
+##### Stripping White Spaces or Specified Characters
 This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
 - `TRIM()`, `RTRIM()`, `LTRIM()`, `BTRIM()`
   - Syntax: `TRIM([LEADING | TRAILING | BOTH] [characters] FROM string)`
@@ -385,7 +386,7 @@ This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
     WHERE TRIM(BOTH 'X' FROM UPPER(code)) = TRIM(BOTH 'X' FROM UPPER(:user_code));
     ```
 
-### Upper and Lower Case
+##### Upper and Lower Case
 - `UPPER()`, `LOWER()`
   - Example:
     ```sql
@@ -394,16 +395,16 @@ This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
     SELECT INITCAP('raj'); -- 'Raj'
     ```
 
-### Reverse
+##### Reverse
 - `REVERSE()`
   - Example:
     ```sql
     SELECT REVERSE('Raj'); -- 'jaR'
     ```
 
-## MySQL Specific Functions
+#### MySQL Specific Functions
 
-### Split Part
+##### Split Part
 - `SUBSTRING_INDEX(string, delimiter, number)`
   - Example:
     -- start from left/ right (1/-1) and stop when we encounter '@'
@@ -412,7 +413,7 @@ This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
     SELECT SUBSTRING_INDEX('newking@gmail.com', '@', -1); -- 'gmail.com'
     ```
 
-### String Aggregation
+##### String Aggregation
 - `GROUP_CONCAT(column [ORDER BY] column SEPARATOR [delimiter])`
   - Used to concatenate strings in `GROUP BY`.
   - Example:
@@ -422,29 +423,29 @@ This is equivalatent to `strip()`, `rstrip()` and `lstrip()` methods in Python.
     GROUP BY pub_id;
     ```
 
-### Title (First letter is upper case and rest are lower case)
+##### Title (The first letter is upper case and the rest are lower cases)
 MySQL doesn’t have an `INITCAP()` function like PostgreSQL databases. Instead, you can achieve the same result by combining `LOWER()` and `UPPER()` functions along with `SUBSTRING()`. Here’s how you can do it:
 - Example:
     ```sql
     SELECT CONCAT(UPPER(SUBSTRING('rAj', 1, 1)), LOWER(SUBSTRING('rAj', 2))); -- 'Raj'
     ```
 
-## PostgreSQL Specific Functions
+#### PostgreSQL Specific Functions
 
-### Split Part
+##### Split Part
 - `SPLIT_PART(string, delimiter, field_index)`
   - Example:
     ```sql
     SELECT SPLIT_PART('newking@gmail.com', '@', 1); -- 'newking'
     ```
-### Title (First letter is upper case and rest are lower case)
+##### Title (First letter is upper case and rest are lower case)
 - `INITCAP(string)`
 - Example:
     ```sql
     SELECT INITCAP('raj'); -- 'Raj'
     ```
 
-### String Aggregation
+##### String Aggregation
 - `STRING_AGG(column, delimiter [ORDER BY column])`
   - Used to concatenate strings in `GROUP BY`.
   - Example:
@@ -454,24 +455,25 @@ MySQL doesn’t have an `INITCAP()` function like PostgreSQL databases. Instead,
     GROUP BY department;
     ```
 
-## Topic 2: Date and Time Functions
+### Date and Time Functions
 
-## Common Functions (PostgreSQL and MySQL)
+#### Date and Time Common Functions
+These date and time functions are common to both MySQL and PostgreSQL.
 
-### Current Date and Time
+##### Current Date and Time
 Aside from NOW(), the following functions can be used with or without parentheses at the end.
 - `NOW()` - Returns the current date and time `YYYY-MM-DD %H:%i:%s`.
 - `CURRENT_DATE()` - Returns the current date in `YYYY-MM-DD` (`%Y-%m-%d`) format. '%Y' means year in four digits and '%y' means year in two digits.
 - `CURRENT_TIME()` - Returns the current time in `%H:%i:%s`.
 - `CURRENT_TIMESTAMP()` - Returns the current date and time `%Y-%m-%d %H:%i:%s`.
 
-### Extracting Parts of a Date/Time
+##### Extracting Parts of a Date/Time
 `EXTRACT(field FROM source)` - Extracts a specific part of a `DATETIME` value. The date/time must be in the format '%Y/%m/%d' (or use '-' as a separator) and must be a `DATETIME` object. If the source is a string, it returns NULL. 
 For example, 
   - `SELECT EXTRACT(MONTH FROM '2018-02-28')`; returns `NULL`.
   - `SELECT EXTRACT(QUARTER FROM NOW());` returns current quarter from today's date.
 
-### Using Intervals
+##### Using Intervals
 Both MySQL and PostgreSQL support interval arithmetic, but their syntax is slightly different. 
 In PostgreSQL, the unit of the interval is enclosed in quotes.
 
@@ -482,15 +484,15 @@ In PostgreSQL, the unit of the interval is enclosed in quotes.
   - PostgreSQL Example: `SELECT NOW() - INTERVAL '1 DAY';`
 
 
-## MySQL Specific Functions
+#### Date and Time MySQL Specific Functions
 
-### Truncating Dates
+##### Truncating Dates
 - `DATE_FORMAT(date, format)` - Formats the date to a specified precision where the date can be either a string or a datetime object.
   - Example: 
     - `SELECT DATE_FORMAT(NOW(), '%Y-%m-01');` (Truncates to the first day of the month)
     - `SELECT DATE_FORMAT(NOW(), '%Y-%m');` (Removes day part from the date)
 
-### Extracting Date Parts
+##### Extracting Date Parts
 "MySQL is highly flexible, as it can automatically recognize string dates as DATETIME objects when they are in the `%Y-%m-%d` format. 
 
 - Extract the quarter
@@ -546,12 +548,12 @@ In PostgreSQL, the unit of the interval is enclosed in quotes.
     SELECT MICROSECOND('2023-09-05 14:30:00.123456') AS microseconds;
     ```
 
-### Casting to Timestamp
+##### Casting to Timestamp
 - `STR_TO_DATE(time_text, format)` - Converts text to date.
   - Example: `SELECT STR_TO_DATE('2023-09-01 12:34:56', '%Y-%m-%d %H:%i:%s');`
 
 
-### Calculating Date Differences
+##### Calculating Date Differences
 - `TIMESTAMPDIFF(unit, datetime_expr1, datetime_expr2)` - Calculates the difference between two dates. This is equivalent to `EXTRACT(EPOCH FROM datetime_expr1 - datetime_expr2)` and converting the `EPOCH in seconds` to desired unit. Make sure datetime_expr1 and datetime_expr2 are explicit date time object in PostgreSQL.
  - Example: `SELECT TIMESTAMPDIFF(YEAR, '1992-06-25 05:15:37', NOW());` where the datetime string should be in the same format as `NOW()`.
    
@@ -560,19 +562,19 @@ In PostgreSQL, the unit of the interval is enclosed in quotes.
   - Example: `SELECT DATE_ADD('2024-08-01', INTERVAL 10 DAY) AS new_date;`
   - Example: `SELECT DATE_SUB('2024-08-01', INTERVAL 10 DAY) AS new_date;`
     
-## PostgreSQL Specific Functions
+#### Date and Time PostgreSQL Specific Functions
 
-### Casting to Timestamp
+##### Casting to Timestamp
 - `TO_TIMESTAMP(time_text, format)` - Converts text to timestamp.
   - Example: `SELECT TO_TIMESTAMP('2023-09-01 12:34:56', 'YYYY-MM-DD HH24:MI:SS');`
 - Explicit Type Casting
   - Example: `SELECT '2023-09-01 12:34:56'::TIMESTAMP;`
 
-### Truncating Dates
+##### Truncating Dates
 - `DATE_TRUNC(field, source)` - Truncates a timestamp or interval to a specified precision.
   - Example: `SELECT DATE_TRUNC('month', NOW());`
 
-### Calculating Date Differences
+##### Calculating Date Differences
 **Note**: Please always use `AGE()` function which calculates the difference by considering the actual calendar months and days. Direct Subtraction assumes 30 days per month.
 
 - `AGE(timestamp, timestamp)` - Calculates the difference between two timestamps.
@@ -585,30 +587,30 @@ In PostgreSQL, the unit of the interval is enclosed in quotes.
     - Example: `SELECT DATE_PART('DAY', '2024-09-01'::timestamp - '2024-08-01'::timestamp) AS days_diff;`
     - Example: `SELECT DATE_PART('YEAR', AGE('2036-09-01'::timestamp,'2024-08-01'::timestamp)) AS years_diff;`
 
-### Using Intervals
+##### Using Intervals
 - `INTERVAL 'quantity unit'` - Adds or subtracts intervals. Make sure the `quantity unit` is inside quotation marks like `INTERVAL 2 MONTH`, this is what is different from MySQL.
   - Example: `SELECT NOW() + INTERVAL '1 DAY';`
 
-### Generating Series
+##### Generating Series
 - `GENERATE_SERIES(start, stop, step)` - Generates a series of values. Note it must be `6 DAYS` not `6 DAY` in the following example.
   - Example: `SELECT GENERATE_SERIES(NOW(), NOW() + INTERVAL '6 DAYS', '1 DAY');`
 
-## Example Queries
+##### Example Queries
 
-### Selecting Last Day's Logs
+**Selecting Last Day's Logs**
 ```sql
 SELECT log_date, log_message 
 FROM logs 
 WHERE log_date >= NOW() - INTERVAL 1 DAY;
 ```
 
-## Topic 3: JOINS
+### JOINS
 
-## Common Functions (PostgreSQL and MySQL)
-
+#### Common JOIN Types
 <img src="https://github.com/newking9088/sql-guide-to-solve-complex-data-science-problems/blob/main/figures/Visual_SQL_JOINS.jpg" alt="Visual SQL JOINS">
 
-### INNER JOIN
+These JOINS can be performed on both MySQL and PostgreSQL.
+###### INNER JOIN
 Only rows matching `customer_id` values in both tables will be returned.
 ```sql
 SELECT orders.order_id, customers.customer_name
@@ -617,7 +619,7 @@ INNER JOIN customers
 ON orders.customer_id = customers.customer_id;
 ```
 
-### LEFT JOIN or LEFT OUTER JOIN
+##### LEFT JOIN or LEFT OUTER JOIN
 Returns all rows from the left table and matching rows from the right table. If there is no match, NULL values are returned for columns from the right table.
 ```sql
 SELECT orders.order_id, customers.customer_name
@@ -626,7 +628,7 @@ LEFT JOIN customers
 ON orders.customer_id = customers.customer_id;
 ```
 
-### RIGHT JOIN or RIGHT OUTER JOIN
+##### RIGHT JOIN or RIGHT OUTER JOIN
 Returns all rows from the right table and matching rows from the left table. If there is no match, NULL values are returned for columns from the left table.
 ```sql
 SELECT orders.order_id, customers.customer_name
@@ -635,7 +637,7 @@ RIGHT JOIN customers
 ON orders.customer_id = customers.customer_id;
 ```
 
-### CROSS JOIN
+##### CROSS JOIN
 It’s like a Cartesian product and returns all possible combinations of rows. No need to use `ON`.
 ```sql
 SELECT orders.order_id, customers.customer_name
@@ -643,7 +645,7 @@ FROM orders
 CROSS JOIN customers;
 ```
 
-### SELF JOIN
+##### SELF JOIN
 Join a table to itself when you need to compare rows within the same table to establish hierarchical relationships within the data. We can use `self join` in lieu of window functions as well.
 ```sql
 SELECT a.employee_id, a.name AS employee_name, b.name AS manager_name
@@ -652,7 +654,7 @@ JOIN employees b -- give different name for same table
 ON a.manager_id = b.employee_id;
 ```
 
-### ON Clause
+##### ON Clause
 When column names are different, or you want to keep both.
 ```sql
 SELECT orders.order_id, customers.customer_name
@@ -675,7 +677,7 @@ ON orders.customer_id = customers.customer_id
 WHERE customers.status = 'active';
 ```
 
-### USING Clause
+##### USING Clause
 When the column names are the same, keeps only one column in the result. I do not recommend this approach, however its good to know it exists.
 ```sql
 SELECT orders.order_id, customers.customer_name
@@ -690,8 +692,8 @@ INNER JOIN customers USING (customer_id)
 WHERE customers.status = 'active';
 ```
 
-### UNION
-If tables have the same structure (same number of columns, same names and same order of columns) and you want to stack their rows on top of each other (removing duplicates by default), you can use `UNION`.
+##### UNION
+If tables have the same structure (same number of columns, same names and the same order of columns) and you want to stack their rows on top of each other (removing duplicates by default), you can use `UNION`.
 ```sql
 SELECT employee_id, name, department
 FROM employees
@@ -700,7 +702,7 @@ SELECT employee_id, name, department
 FROM contractors;
 ```
 
-### UNION ALL
+##### UNION ALL
 If you want to keep duplicates (rows) as well.
 ```sql
 SELECT employee_id, name, department
@@ -710,7 +712,7 @@ SELECT employee_id, name, department
 FROM contractors;
 ```
 
-## MySQL Specific Functions
+### MySQL Specific JOINs
 
 MySQL **does not support FULL JOIN or FULL OUTER JOIN** directly. You can achieve similar results using a combination of `LEFT JOIN` and `RIGHT JOIN` with `UNION`.
 ```sql
@@ -726,9 +728,9 @@ ON orders.customer_id = customers.customer_id;
 ```
 
 
-## PostgreSQL Specific Functions
+### PostgreSQL Specific JOINs
 
-### INTERSECT
+#### INTERSECT
 Selects rows common to both queries.
 ```sql
 SELECT employee_id, name, department
@@ -737,7 +739,7 @@ INTERSECT
 SELECT employee_id, name, department
 FROM contractors;
 ```
-### EXCEPT
+#### EXCEPT
 Selects rows from the first query that are not in the second query. Its like A - B in set (Keep all elements from A after deleting common elements from B).
 ```sql
 SELECT employee_id, name, department
@@ -747,7 +749,7 @@ SELECT employee_id, name, department
 FROM contractors;
 ```
 
-### FULL JOIN or FULL OUTER JOIN
+#### FULL JOIN or FULL OUTER JOIN
 Returns all rows when there is a match in either the left or right table. If there is no match, NULL values are returned for columns from the opposite table.
 ```sql
 SELECT orders.order_id, customers.customer_name
@@ -758,7 +760,7 @@ ON orders.customer_id = customers.customer_id;
 
 Let’s understand how joins work. Let’s say we have `Table A` and `Table B` with a common column user_id
 
-### Table A
+##### Table A
 | user_id | first_name |
 |---------|------------|
 | 1       | Alice      |
@@ -767,7 +769,7 @@ Let’s understand how joins work. Let’s say we have `Table A` and `Table B` w
 | 1       | David      |
 | 2       | Eve        |
 
-### Table B
+##### Table B
 | user_id | last_name  |
 |---------|------------|
 | 1       | Smith      |
@@ -778,7 +780,7 @@ Let’s understand how joins work. Let’s say we have `Table A` and `Table B` w
 
 Lets do different types of `JOIN` on `user_id` and report how the output looks like.
 
-#### Step-by-Step Matching for INNER JOIN
+###### Step-by-Step Matching for INNER JOIN
 ```sql
 SELECT a.user_id, a.first_name, b.last_name
 FROM table_a a
@@ -846,7 +848,7 @@ Combine all results:
 
 This step-by-step explanation should help you understand how an INNER JOIN works by matching each row in Table A with rows in Table B based on the user_id. 
 
-#### Step-by-Step Matching for LEFT JOIN
+##### Step-by-Step Matching for LEFT JOIN
 ```sql
 SELECT a.user_id, a.first_name, b.last_name
 FROM table_a a
@@ -867,7 +869,7 @@ A `LEFT JOIN` is essentially an `INNER JOIN` plus the remaining unmatched rows f
 | 1       | David      | Williams  |
 | 2       | Eve        | NULL      |
 
-#### Step-by-Step Matching for RIGHT JOIN
+##### Step-by-Step Matching for RIGHT JOIN
 ```sql
 SELECT a.user_id, a.first_name, b.last_name
 FROM table_a a
@@ -888,8 +890,8 @@ A `RIGHT JOIN` is essentially an `INNER JOIN` plus the remaining unmatched rows 
 | NULL    | NULL       | Brown     |
 | 3       | NULL       | Davis     |
 
-#### Step-by-Step Matching for OUTER JOIN
-An `OUTER JOIN` is essentially an `INNER JOIN` with unmatched rows from both tablles appended at the bottom. Alternatively, it can be viewed as a `UNION` of `RIGHT JOIN` and `LEFT JOIN`. We append rows corresponding to user_id = 2 from table A and user_id = 3 and user_id = NULL to the result of `INNER JOIN`.
+##### Step-by-Step Matching for OUTER JOIN
+An `OUTER JOIN` is essentially an `INNER JOIN` with unmatched rows from both tables appended at the bottom. Alternatively, it can be viewed as a `UNION` of `RIGHT JOIN` and `LEFT JOIN`. We append rows corresponding to user_id = 2 from table A and user_id = 3 and user_id = NULL to the result of `INNER JOIN`.
 
 ```sql
 SELECT a.user_id, a.first_name, b.last_name
@@ -911,15 +913,15 @@ ON a.user_id = b.user_id;
 | 3       | NULL       | Davis     |
 | 2       | Eve        | NULL      |
 
-### JOIN Takeaways:
+##### JOIN Takeaways:
 
- - <span style = "color:green; font-weight:bold; font-size:20px;"> You never have to use `RIGHT JOIN` if you prefer. The rule of thumb is to use `LEFT JOIN` where the larger table based on [common] column to join on, the table for which you want all information from, is on the left and the smaller table, the table for which we want only information common with larger table, is on the right. This makes the query more intuitive and easier to read.</span>
- - <span style = "color:green; font-weight:bold; font-size:20px;"> When you use a `LEFT JOIN`, you return all rows from the left table, and if the right table does not have matching rows, it returns `NULL`. When you want `NULL` values from the right table if the rows do not match based on join column (usually the smaller table in terms of the column you join on), you should use `LEFT JOIN`. If you want `NULL` values from both tables, use a `FULL OUTER JOIN`.</span>
+ - <span style = "color:green; font-weight:bold; font-size:20px;"> You never have to use `RIGHT JOIN` if you prefer. The rule of thumb is to use `LEFT JOIN` where the larger table based on the [common] column to join on, the table for which you want all information from, is on the left and the smaller table, the table for which we want only information common with a larger table, is on the right. This makes the query more intuitive and easier to read.</span>
+ - <span style = "color:green; font-weight:bold; font-size:20px;"> When you use a `LEFT JOIN`, you return all rows from the left table, and if the right table does not have matching rows, it returns `NULL`. When you want `NULL` values from the right table if the rows do not match based on the join column (usually the smaller table in terms of the column you join on), you should use `LEFT JOIN`. If you want `NULL` values from both tables, use a `FULL OUTER JOIN`.</span>
 - <span style = "color:green; font-weight:bold; font-size:20px;">  Use `INNER JOIN` when you want to return only the rows that have matching values in both tables. This is useful when you need to find records that exist in both tables.</span>
 
-**Topic 3: AGGREGATIONS AND GROUPING**
+### AGGREGATIONS AND GROUPING
 
-When you need to calculate aggregates for a group, use `GROUP BY` clause. The `GROUP BY` clause must be accompanied by an `aggregate function`. **This is a crucial concept in Data Science. Please ensure you thoroughly understand each concept below before tackling real-world problems.**
+When you need to calculate aggregates for a group, use the `GROUP BY` clause. The `GROUP BY` clause must be accompanied by an `aggregate function`. **This is a crucial concept in Data Science. Please ensure you thoroughly understand each concept below before tackling real-world problems.**
 
 - **GROUP BY**: Aggregating data into groups.
 - **HAVING**: Filtering groups after aggregation.
@@ -1019,18 +1021,18 @@ The result of the above query looks like this:
 |             | Tablet  | 300.00      |
 
 
-## GROUP BY Takeaways:
+#### GROUP BY Takeaways:
 - The `GROUP BY` clause is used to aggregate data into groups based on **one or more columns**.
 - It **must be accompanied by an aggregate function** such as SUM(), COUNT(), AVG(), MIN(), MAX() or GROUP_CONCAT().
 - We can only `select columns` that are in `GROUP BY` clause.
 - Use `WHERE` clause to filter data before `GROUP BY` and `HAVING` to filter groups based on aggregate results after `GROUP BY`.
 
  
-## Topic 5: SUBQUERIES & NESTED QUERIES
+### SUBQUERIES & NESTED QUERIES
 
 A basic subquery is enclosed within parentheses and typically placed within a `WHERE`, `FROM`, or `SELECT` clause of the main query.
 
-### Example 1: Subquery in `SELECT` Clause
+#### Example 1: Subquery in `SELECT` Clause
 Assume two tables: orders and customers. Let’s count orders per customer.
 ```sql
 SELECT customer_id, customer_name,
@@ -1044,7 +1046,7 @@ This query effectively performs a kind of "loop" over the customers table, match
 
 **Note**: `COUNT(*)` counts `NULL` values as well but `COUNT(col_name)` counts only `NON NULL` values in the column.
 
-### Example 2: Subquery in `WHERE` Clause
+#### Example 2: Subquery in `WHERE` Clause
 Assume we have two tables: `customers` (with columns `customer_id`, `customer_name`) and `orders` (with columns `order_id`, `customer_id`, `order_amount`). We want to find customers who have placed orders greater than $1000.
 
 ```sql
@@ -1057,7 +1059,7 @@ WHERE customer_id IN (
 );
 ```
 
-### Example 2: Subquery in `FROM` Clause (Derived Tables)
+#### Example 2: Subquery in `FROM` Clause (Derived Tables)
 Assume you have two tables: customers (with columns customer_id, customer_name) and orders (with columns order_id, customer_id, order_amount). You want to find customers whose individual order amounts are above the average order amount across all customers.
 ```sql
 SELECT c.customer_id, c.customer_name, o.avg_order_amount
@@ -1073,7 +1075,7 @@ WHERE o.avg_order_amount > (
     FROM orders
 );
 ```
-### Example 4: Correlated Subqueries
+#### Example 4: Correlated Subqueries
 Finding employees with salaries above their department average. Assume a table of employees. In the given SQL query, the subquery is considered a correlated subquery because it references a column from the outer query, creating a dependency between the inner and outer queries. 
 ```sql
 SELECT employee_id, employee_name, salary
@@ -1096,7 +1098,7 @@ The condition `WHERE department_id = e.department_id` ensures that:
 
 This creates a correlation between the outer and inner queries, making the subquery dependent on the outer query.
 
-### Example 5: Using Subqueries with EXISTS and NOT EXISTS
+#### Example 5: Using Subqueries with EXISTS and NOT EXISTS
 `EXISTS` and `NOT EXISTS` are SQL keywords used to check for the existence of rows returned by a subquery. They are often used in `WHERE` clauses to conditionally filter rows based on whether the subquery returns any result.
 
 Assume tables customers and invoices. We want to find customers who have unpaid invoices.
@@ -1115,11 +1117,11 @@ If the subquery finds even a single matching row, the `EXISTS` condition is sati
 
 It's useful when you just need to know if a customer has any unpaid invoices, returning their id and name. However, if a customer has multiple unpaid invoices and you want to analyze each one individually, EXISTS won't work well. It's not designed to return all the matching details or rows from the invoices. In that case, you'd need to use a different approach, like a join or a subquery that returns the actual invoice rows for further analysis.
 
-## TOPIC 6: COMMON TABLE EXPRESSIONS (CTEs)
+### COMMON TABLE EXPRESSIONS (CTEs)
 
 CTEs are used for readability, code reusability, recursive queries, data transformation, aggregation, and window functions. We can define as many CTEs as needed and use results from one CTE in another. **There must be a query with a SELECT statement after the CTE is defined.**
 
-### Example: Average Order Amount per Customer
+#### Example: Average Order Amount per Customer
 Assume two tables: `customers` (with column names `customer_id`, `customer_name`) and `orders` (with columns `order_id`, `customer_id`, and `order_amount`). 
 
 ```sql
@@ -1144,7 +1146,7 @@ This example demonstrates how to use a CTE to calculate the average order amount
 We had to use a CTE because we wanted `customer_name` in the final result as well. If you look at the CTE `AvgOrderAmountPerCustomer`, we have grouped by the column `customer_id`, and we can only select the column which is in the `GROUP BY` clause: `customer_id`. However, we wanted `customer_name` in the result as well, which is why we had to store the grouped result in a CTE and then join it with the original table to get the desired result.**
 
 
-# TOPIC 7: WINDOW FUNCTIONS
+### WINDOW FUNCTIONS
 
 Window functions are different from aggregate functions like `SUM()` or `AVG()` in that they do not collapse the rows into a single output row for each group.
 
@@ -1158,8 +1160,8 @@ WINDOW_FUNCTION(column) OVER (
 ```
 **Note: Not all window functions require a column as an argument, for example, RANK().**
 
-## Window Functions That Don't Require Ordering (Except for Running Aggregates)
-All aggregate functions require an argument column that has the appropriate data type. For example, SUM(), AVG() etc. must have numeric column as its argument.
+#### Window Functions That Don't Require Ordering (Except for Running Aggregates)
+All aggregate functions require an argument column that has the appropriate data type. For example, SUM(), AVG() etc. must have a numeric column as its argument.
 
 - SUM(column) OVER(ORDER BY sort_exp)-- Returns running total.
 - AVG(column) OVER(ORDER BY sort_exp)-- Returns running average.
@@ -1172,23 +1174,23 @@ Please remember that `SUM(column) OVER()` calculates the total sum of the column
 Standard aggregate functions in SQL are designed to handle `NULL` values. For example, `SUM()` ignores `NULL` values when calculating the total. This means you don't need to worry about `NULL` values affecting the results of your standard aggregate functions.
 
 
-## Window Functions thhat MUST to be sorted (Rank Functions)
-- ROW_NUMBER() -- Gives unique serial number from 1 to length of table
-- RANK() -- Gap in rank if tie, use same rank for tie and the next rank will skip the number of tied rows
-- DENSE_RANK() -- No gap in rank if tie, gives same rank
+#### Window Functions that MUST be sorted (Rank Functions)
+- ROW_NUMBER() -- Gives unique serial number from 1 to length of the table
+- RANK() -- Gap in rank if a tie, use the same rank for the tie and the next rank will skip the number of tied rows
+- DENSE_RANK() -- No gap in rank if the tie gives the same rank
 - PERCENT_RANK() -- Relative standing of a value within a dataset, expressed as a percentage
 - CUME_DIST() -- cumulative distribution of value that lies between (0, 1]
 - NTILE(n) - n (number of partitions), n = 1 means top bucket
 - LEAD(column, offset, default) -- get [offset] next row
 - LAG(column, offset, default) -- get [offset] previous row
-- FIRST_VALUE(column) -- get first value of a column
-- LAST_VALUE(column) -- get last value of a column
+- FIRST_VALUE(column) -- get the first value of a column
+- LAST_VALUE(column) -- get the last value of a column
 - NTH_VALUE(column, n) -- get nth value of a column
 
 
-For LEAD() and LAG(), the default `offset` is 1 (get next row value for `LEAD` and get previous row value for `LAG`) and `default` is `NULL` if the next or previous row does not exists. We can specify value for `default` like keep the current row value as `LEAD(column, 1, column)`. 
+For LEAD() and LAG(), the default `offset` is 1 (get the next row value for `LEAD` and get the previous row value for `LAG`), and `default` is `NULL` if the next or previous row does not exist. We can specify a value for `default` like keeping the current row value as `LEAD(column, 1, column)`. 
 
-### Frame Clauses
+#### Frame Clauses
 Operates on physical row positions.
 
 - **ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW**: Includes all rows from the start of the partition to the current row. This is default if you do not specify frame clause in `OVER()`.
@@ -1298,7 +1300,7 @@ WHERE
     salary_bucket = 1;
 ```
 
-## Topic 10: CONDITIONAL STATEMENTS
+### CONDITIONAL STATEMENTS
 
 Create a new column (or modify an existing column) based on conditions applied to an existing column or columns.
 ```sql
@@ -1345,7 +1347,7 @@ FROM pivoted_data;
 
 If using `CASE` with `GROUP BY`, do not forget to use the aggregate function. Let’s say you have a table sales with columns salesperson, region, and sales_amount. You want to categorize the sales amounts into ‘High’, ‘Medium’, and ‘Low’ categories and then calculate the total sales for each category.
 
-### Nested CASE
+#### Nested CASE
 
 ```sql
 SELECT 
@@ -1397,9 +1399,9 @@ FROM
 ```
 
 
-## Topic 11: Handling NULL Values
+### Handling NULL Values
 
-### IS NULL/ IS NOT NULL
+#### IS NULL/ IS NOT NULL
 - **Description**: Checks if a value is NULL.
 
 ```sql
@@ -1407,7 +1409,7 @@ FROM
   WHERE Paid IS NULL;
 ```
 
-### COALESCE(column, value)
+##### COALESCE(column, value)
 
 **Description**: Replaces `NULL` values in a column with a specified value. It is equivalent to `fillna(value)` in pandas. Unlike in pandas, COALESCE() should be applied to columns individually.
 
@@ -1422,7 +1424,7 @@ WHERE
 GROUP BY
     COALESCE(category, 'unknown');
 ```
-### IFNULL(expression1, expression2) works only for MySQL like COALESCE() 
+#### IFNULL(expression1, expression2) works only for MySQL like COALESCE() 
 
 **Description**: Returns `NULL` if the two expressions are equal; otherwise, returns the either of `expression1 or expression2` whichever is not `NULL`. If both values are not `NULL`, returns first value.
 
@@ -1431,7 +1433,7 @@ SELECT id, name, IFNULL(bonus, 0) AS bonus
 FROM employees;
 ```
 
-### NULLIF(expression1, expression2)
+#### NULLIF(expression1, expression2)
 
 **Description**: Returns `NULL` if the two expressions are equal; otherwise, returns the `first expression`.
 
@@ -1441,19 +1443,19 @@ FROM some_table;
 ```
 If the `another_value is zero`, it returns `NULL` else returns `another_value`.
 
-## Topic 12: DISTINCT CLAUSE
+### DISTINCT CLAUSE
 
-### Use DISTINCT When
+#### Use DISTINCT When
 1. Need to remove duplicate rows, select unique values, or count unique entries.
 2. Optimize your use of DISTINCT to ensure efficient queries and accurate results.
 
-## Avoid DISTINCT When
+#### Avoid DISTINCT When
 1. It is unnecessary, could impact performance negatively, or when the data is already unique.
 
-## DON'T Dos
+#### DON'T Dos
 <span style="color:red">**SELECT column1, DISTINCT column2 FROM table;**</span>
 
-## Slecting unique combination of two columns
+#### Selecting a unique combination of two columns
 Let’s say you have a table `employees` with columns `department` and `job_title`. You want to `find unique combinations of departments and job titles`.
 
 ```sql
@@ -1462,14 +1464,14 @@ FROM employees;
 ```
 
 
-## Examples
-###  Count Distinct Values
+#### Examples
+#####  Count Distinct Values
 ```sql
 SELECT COUNT(DISTINCT product) AS unique_products
 FROM sales;
 ```
 
-Note that aggregate functions `MIN()`, `MAX()` return multiple values if there are multiple minimum, maximum and if we want unique value then we should use `DISTINCT` with `MIN()` and `MAX()`.
+Note that aggregate functions `MIN()`, and `MAX()` return multiple values if there are multiple minimum and maximum and if we want unique values then we should use `DISTINCT` with `MIN()` and `MAX()`.
 
 ```sql
 SELECT 
@@ -1482,7 +1484,7 @@ GROUP BY
     product;
 ```
 
-## Topic 13: SQL Logical Operators
+### SQL Logical Operators
 
 - **AND**
   - **Description**: Returns TRUE if all the conditions separated by AND are TRUE.
@@ -1540,7 +1542,7 @@ GROUP BY
     WHERE EXISTS (SELECT * FROM employees WHERE employees.department_id = departments.id);
     ```
 
-### These are only for PostgreSQL.
+#### These are only for PostgreSQL.
 
 - **ALL**
   - **Description**: Returns TRUE if all of a set of comparisons are TRUE.
@@ -1567,9 +1569,9 @@ GROUP BY
     ```
 
 
-## Additional Notes for PostgreSQL
+#### Additional Notes for PostgreSQL
 
-## FILTER() Clause
+##### FILTER() Clause
 
 - **FILTER** is always used with aggregate functions (with or without `GROUP BY`).
 - **Syntax**:
@@ -1583,7 +1585,7 @@ FROM
     sales;
 ```
 
-## Calculate Aggregate on Some Other Column Based on Category Column [Calculates conditional aggregates]
+##### Calculate Aggregate on Some Other Column Based on Category Column [Calculates conditional aggregates]
 
 ```sql
 SELECT
@@ -1593,7 +1595,9 @@ FROM
     sales;
 ```
 
-After reviewing the SQL concepts, we are now ready to tackle real-world problems with confidence and skill. Lets solve some problems in Leetcode. 
+## Practice Problems
+
+After reviewing the SQL concepts, we are now ready to tackle real-world problems with confidence and skill. Let's solve some problems in Leetcode. 
 
 - **Take 30 Seconds to Read the Question** : Carefully read the problem statement to understand what is being asked. Pay attention to the details and any specific requirements.
 
@@ -1605,11 +1609,11 @@ After reviewing the SQL concepts, we are now ready to tackle real-world problems
 
 **Please note that SQL is case insensitive and no indentation is needed. I prefer to use all capital letters for SQL keywords to keep the code neat and more readable**.
 
-# Easy Questions
+### Easy Questions
 
 [1757. Recyclable and Low Fat Products](https://leetcode.com/problems/recyclable-and-low-fat-products/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Thought Process: We want to `select` product for only rows `where` low_fats is 'Y' (Yes) and recylable is 'Y' (Yes).
+Thought Process: We want to `select` product for only rows `where` low_fats is 'Y' (Yes) and recyclable is 'Y' (Yes).
 
 ```sql
 SELECT product_id
@@ -1619,7 +1623,7 @@ WHERE low_fats = 'Y' AND recyclable = 'Y';
 
 [595. Big Countries](https://leetcode.com/problems/big-countries/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Thought Process: We want to `seelct` the columns `name`, `population` and `area` and only rows `where` a country has an area of at least three million (i.e., 3000000 km2), or a population of at least twenty-five million (i.e., 25000000).
+Thought Process: We want to `select` the columns `name`, `population`, and `area` and only rows `where` a country has an area of at least three million (i.e., 3000000 km2), or a population of at least twenty-five million (i.e., 25000000).
 
 ```sql
 SELECT name, population, area
@@ -1629,13 +1633,13 @@ WHERE area >= 3000000 OR population >= 25000000;
 
 [1148. Article Views](https://leetcode.com/problems/article-views-i/description/?envType=study-plan-v2&envId=top-sql-50)
 
-Thought Process: Since author_id and viewer_id indicate the same person, we can simply `seelct` rows `where` viewer_id = author_id. Since an author may have viewed their own article more than once, we want to return only `distinct` author_id. Notice the output table has column name `id`, we should `select` author_id values as `id` and order the result by `id` in ascending order.
+Thought Process: Since author_id and viewer_id indicate the same person, we can simply `select` rows `where` viewer_id = author_id. Since an author may have viewed their own article more than once, we want to return only `distinct` author_id. Notice the output table has column name `id`, we should `select` author_id values as `id` and order the result by `id` in ascending order.
 
 ```sql
 SELECT DISTINCT author_id AS id
 FROM views
 WHERE author_id = viewer_id
-ORDER BY author_id; -- ASC is default, try `ORDER BY id` and ask yourself why it works
+ORDER BY author_id; -- ASC is the default, try `ORDER BY id` and ask yourself why it works
 ```
 
 [1683. Invalid Tweets](https://leetcode.com/problems/invalid-tweets/description/?envType=study-plan-v2&envId=top-sql-50)
@@ -1674,7 +1678,7 @@ ON p.personId = a.personId;
 
 [182. Duplicate Emails](https://leetcode.com/problems/duplicate-emails/description/?envType=problem-list-v2&envId=e55d9ob1)
 
-Thought Process: If emails are duplicated, we can `GROUP BY` email and count the size of each group then filter only groups whose size is greater than 1 (means email are duplicated).
+Thought Process: If emails are duplicated, we can `GROUP BY` email and count the size of each group then filter only groups whose size is greater than 1 (means emails are duplicated).
 
 ```sql
 SELECT Email
@@ -1685,13 +1689,13 @@ HAVING COUNT(*) > 1;
 
 [1378. Replace Employee ID with the Unique Identifier](https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/?envType=study-plan-v2&envId=top-sql-50)
 
-Thought Process: Since we want column `unique_id` from table `EmployeeUNI` and column `name` from table `Employees`. That means we have to `JOIN` these two tables. What kind of `JOIN`?. One hint is the output table contains `NULL` unique_id after `JOIN`, that does not happen in `INNER JOIN` and we want all `name` in `Employees` table in the output. As a rule of thumb, we always do `LEFT JOIN` using bigger table (set) on the left side (`Employees`) and smaller table (subset) on the right side (`EmployeeUNI`). From the combined table, we only seelct `unique_id` and `name` columns.
+Thought Process: Since we want column `unique_id` from table `EmployeeUNI` and column `name` from table `Employees`. That means we have to `JOIN` these two tables. What kind of `JOIN`?. One hint is the output table contains `NULL` unique_id after `JOIN`, that does not happen in `INNER JOIN` and we want all `name` in `Employees` table in the output. As a rule of thumb, we always do `LEFT JOIN` using bigger table (set) on the left side (`Employees`) and a smaller table (subset) on the right side (`EmployeeUNI`). From the combined table, we only seelct `unique_id` and `name` columns.
 
 ```sql
 SELECT unique_id,
 name
 FROM employees e LEFT JOIN employeeuni eu -- short names for table moving forward
-ON e.id = eu.id; -- we used short names for table so we dont have to type long name
+ON e.id = eu.id; -- we used short names for the table so we don't have to type a long name
 ```
 
 
@@ -2149,7 +2153,7 @@ HAVING count(*)  >= 3;
 
 
 
-# Medium Questions
+### Medium Questions
 
 [570. Managers with at least 5 Direct Reporters](https://leetcode.com/problems/managers-with-at-least-5-direct-reports/?envType=study-plan-v2&envId=top-sql-50)
 
@@ -2883,7 +2887,7 @@ FROM DailySales
 GROUP BY date_id, make_name;
 ```
 
-# Hard Questions
+### Hard Questions
 
 [185. Department Top three Salaries](https://leetcode.com/problems/department-top-three-salaries/?envType=study-plan-v2&envId=top-sql-50)
 
