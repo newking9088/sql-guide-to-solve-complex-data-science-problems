@@ -1414,15 +1414,40 @@ WITH pivoted_data AS (
     FROM products
     GROUP BY region
 )
--- converts wide table to long table
-SELECT region, 'Electronics' as category, Electronics_Count as count
+-- converts wide table to long table (three ways to specify column names)
+-- Version 1: Explicit consistent naming (Recommended)
+SELECT region, 'Electronics' AS category, Electronics_Count AS count
+FROM pivoted_data
+UNION ALL
+SELECT region, 'Clothing' AS category, Clothing_Count AS count
+FROM pivoted_data
+UNION ALL
+SELECT region, 'Books' AS category, Books_Count AS count
+FROM pivoted_data
+ORDER BY region, category;
+
+/*Version 2: No explicit naming (the first select column names are used for the final table,
+'Electronics' is used both as column name and value for the first select)*/
+SELECT region, 'Electronics', Electronics_Count
 FROM pivoted_data
 UNION ALL
 SELECT region, 'Clothing', Clothing_Count
 FROM pivoted_data
 UNION ALL
 SELECT region, 'Books', Books_Count
-FROM pivoted_data;
+FROM pivoted_data
+ORDER BY region;
+
+-- Version 3: Mixed naming (not recommended but works, the final table will have column names of first select)
+SELECT region, 'Electronics' AS category, Electronics_Count AS count
+FROM pivoted_data
+UNION ALL
+SELECT region, 'Clothing' AS type, Clothing_Count AS total
+FROM pivoted_data
+UNION ALL
+SELECT region, 'Books' AS product, Books_Count AS quantity
+FROM pivoted_data
+ORDER BY region;
 ```
 
 If using `CASE` with `GROUP BY`, do not forget to use the aggregate function. Let’s say you have a table sales with columns salesperson, region, and sales_amount. You want to categorize the sales amounts into ‘High’, ‘Medium’, and ‘Low’ categories and then calculate the total sales for each category.
