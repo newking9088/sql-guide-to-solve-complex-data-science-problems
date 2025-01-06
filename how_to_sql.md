@@ -1173,6 +1173,86 @@ Please remember that `SUM(column) OVER()` calculates the total sum of the column
 
 Standard aggregate functions in SQL are designed to handle `NULL` values. For example, `SUM()` ignores `NULL` values when calculating the total. This means you don't need to worry about `NULL` values affecting the results of your standard aggregate functions.
 
+#### Understanding SQL Aggregation Patterns
+
+##### Basic `SUM(column)`
+A basic aggregate function that reduces multiple rows into a single total.
+
+```sql
+SELECT department, SUM(salary) 
+FROM employees 
+GROUP BY department;
+```
+
+*Effect:* Returns one row per group with the total. Must use GROUP BY if selecting non-aggregated columns.
+
+##### Window Function: `SUM(column) OVER()`
+Window function that shows the total sum for all rows without reducing row count.
+
+```sql
+SELECT 
+    department, 
+    salary,
+    SUM(salary) OVER() as total_salary 
+FROM employees;
+```
+
+*Effect:* Each row displays the same grand total - like copying the total to every row.
+
+##### Running Total: `SUM(column) OVER(ORDER BY sort_expression)`
+Creates running/cumulative totals based on the specified order.
+
+```sql
+SELECT 
+    date, 
+    amount,
+    SUM(amount) OVER(ORDER BY date) as running_total
+FROM transactions;
+```
+
+*Effect:* Each row shows the sum of the current and all previous rows in sort order.
+
+##### Partitioned Total: `SUM(column) OVER(PARTITION BY partition_column)`
+Calculates separate totals for each partition group.
+
+```sql
+SELECT 
+    department, 
+    employee_name, 
+    salary,
+    SUM(salary) OVER(PARTITION BY department) as dept_total
+FROM employees;
+```
+
+*Effect:* Like GROUP BY but keeps original row count. Each row shows its group's total.
+
+##### Partitioned Running Total: `SUM(column) OVER(PARTITION BY partition_column ORDER BY sort_expression)`
+Combines partitioning with running totals.
+
+```sql
+SELECT 
+    department, 
+    date, 
+    amount,
+    SUM(amount) OVER(
+        PARTITION BY department 
+        ORDER BY date
+    ) as dept_running_total
+FROM transactions;
+```
+
+*Effect:* Creates separate running totals within each partition group.
+
+##### Summary
+
+| Pattern | Effect |
+|---------|--------|
+| `SUM()` | Single total, reduces rows |
+| `OVER()` | Same total on all rows |
+| `OVER(ORDER BY)` | Running totals |
+| `OVER(PARTITION BY)` | Group totals |
+| `OVER(PARTITION BY ORDER BY)` | Running totals within groups |
+
 
 #### Window Functions that MUST be sorted (Rank Functions)
 - ROW_NUMBER() -- Gives unique serial number from 1 to length of the table
