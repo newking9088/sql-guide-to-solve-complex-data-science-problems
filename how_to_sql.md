@@ -1726,6 +1726,7 @@ After reviewing the SQL concepts, we are now ready to tackle real-world problems
 **Please note that SQL is case insensitive and no indentation is needed. I prefer to use all capital letters for SQL keywords to keep the code neat and more readable**.
 
 [HackerRank Practice Problems](https://www.hackerrank.com/domains/sql?filters%5Bdifficulty%5D%5B%5D=medium&filters%5Bdifficulty%5D%5B%5D=hard)
+
 [DataLemur](https://datalemur.com/)
 
 ### Easy Questions
