@@ -13,6 +13,7 @@ author: Nawaraj Paudel, PhD
 * [Why Learn SQL](#why-learn-sql)
 * [Platforms to Learn SQL](#platforms-to-learn-sql)
 * [Relational Databases](#relational-databases)
+* [Database Normalization: Normal Forms](#database-normalization-normal-forms)
 * [SQL Statements and Syntax](#sql-statements-and-syntax)
 
 ## Core Topics
@@ -103,6 +104,42 @@ Following are some of the popular relational databases:
 - MariaDB
 - Oracle
 - IBM DB2
+
+### Database Normalization: Normal Forms
+
+#### First Normal Form (1NF)
+- Each column must contain atomic values (no lists or nested data) 
+- All entries in a column must be of the same data type
+- Each row must be unique (typically ensured by a primary key)
+- No repeating groups of columns
+
+#### Second Normal Form (2NF) 
+- Must satisfy all conditions of 1NF
+- All non-key attributes must be fully functionally dependent on the primary key
+- No partial dependencies where some columns depend on only part of the primary key
+
+**Example of 2NF Violation**
+In a table with composite key (StudentID, CourseID):
+- Student_Name depends only on StudentID
+- Course_Name depends only on CourseID  
+- Grade depends on both (StudentID, CourseID)
+
+#### Third Normal Form (3NF)
+- Must satisfy all conditions of 2NF
+- No transitive dependencies 
+- All fields must depend on the key, the whole key, and nothing but the key
+
+**Example of Transitive Dependency**
+- StudentID → DepartmentID → Department_Name
+- Department_Name depends on DepartmentID, not directly on StudentID
+
+#### Key Benefits
+- Reduces data redundancy
+- Ensures data consistency  
+- Makes database maintenance easier
+- Minimizes data anomalies
+
+**Note:** While higher normal forms exist (4NF, 5NF, BCNF), most real-world applications achieve sufficient data integrity with 3NF.
 
 ### SQL Statements and Syntax
 
