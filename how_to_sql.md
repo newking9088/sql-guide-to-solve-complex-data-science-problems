@@ -203,7 +203,7 @@ graph TD
 
 #### Exploring Data Manipulation Language (DML)
 
-We will primarily focus on Data Manipulation Language (DML) as it is the key area for SQL and most of the learning. This focus is particularly important because data scientists, machine learning engineers, and data analysts frequently use DML in their day-to-day work.
+We will primarily focus on Data Manipulation Language (DML) as it is the key area for SQL and most learning. This focus is significant because data scientists, machine learning engineers, and data analysts frequently use DML in their day-to-day work.
 
 **SELECT**
 The `SELECT` statement is used to query data from a table. This is the most important command we will use in DML.
@@ -214,7 +214,7 @@ SELECT 2; -- It prints out 2 in the console
 ```
 
 **INSERT**
-The `INSERT` statement is used to add new rows to a table and we cab add multiple rows at once.
+The `INSERT` statement is used to add new rows to a table and we can add multiple rows at once.
 
 ```sql
 INSERT INTO table_name (col1, col2, col3)
