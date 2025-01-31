@@ -1655,7 +1655,7 @@ GROUP BY
   - **Example**:
     ```sql
     SELECT * FROM departments
-    WHERE EXISTS (SELECT * FROM employees WHERE employees.department_id = departments.id);
+    WHERE EXISTS (SELECT 1 FROM employees WHERE employees.department_id = departments.id);
     ```
 
 #### These are only for PostgreSQL.
