@@ -187,18 +187,20 @@ graph TD
 - Modifies the actual structure of a database rather than its content.
 - Used for creating, altering, and deleting database objects.
 
-  Commands:
-  - `CREATE`: Creates a new table, view, or other database object.
-  - `DROP`: Deletes an existing database object like a table or view.
-  - `ALTER`: Modifies the structure of an existing database object.
-  - `RENAME`: Changes the name of an existing database object.
-  - `COMMENT`: Adds comments to the data dictionary for a database object.
+ Commands (DDRCCAT):
+- `DROP`: Deletes an existing database object like a table or view.
+- `DELETE`: Deletes an existing database object like a table or view.
+- `RENAME`: Changes the name of an existing database object.
+- `CREATE`: Creates a new table, view, or other database object.
+- `COMMENT`: Adds comments to the data dictionary for a database object.
+- `ALTER`: Modifies the structure of an existing database object.
+- `TRUNCATE`: Removes all records from a table quickly by deallocating pages.
 
 #### Data Manipulation Language (DML)
 - Allows you to manipulate the database's content.
 - Used for searching, inserting, updating, and deleting data.
 
-  Commands:
+  Commands (DISU):
   - `SELECT`: Retrieves data from the database.
   - `INSERT`: Adds new rows of data to a table.
   - `UPDATE`: Modifies existing data within a table.
