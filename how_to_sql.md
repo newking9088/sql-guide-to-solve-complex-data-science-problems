@@ -188,8 +188,8 @@ graph TD
 - Used for creating, altering, and deleting database objects.
 
  Commands (DDRCCAT):
-- `DROP`: Deletes an existing database object like a table or view.
-- `DELETE`: Deletes an existing database object like a table or view.
+- `DROP`: Deletes an existing database object like a table or view and its entire data.
+- `DELETE`: Delete removes specific rows from the table or view if it allows delete operation which will delete rows from underlying table as well.
 - `RENAME`: Changes the name of an existing database object.
 - `CREATE`: Creates a new table, view, or other database object.
 - `COMMENT`: Adds comments to the data dictionary for a database object.
