@@ -200,11 +200,11 @@ graph TD
 - Allows you to manipulate the database's content.
 - Used for searching, inserting, updating, and deleting data.
 
-  Commands (DISU):
+  Commands (SIDU):
   - `SELECT`: Retrieves data from the database.
   - `INSERT`: Adds new rows of data to a table.
-  - `UPDATE`: Modifies existing data within a table.
   - `DELETE`: Removes data from a table.
+  - `UPDATE`: Modifies existing data within a table.
 
 #### Data Control Language (DCL)
 - Manages user access rights to the database.
