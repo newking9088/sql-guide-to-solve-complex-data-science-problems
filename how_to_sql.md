@@ -321,8 +321,17 @@ graph TD
     classDef default fill:#fff
 ```
 
-<span style="color:green;">Writing SQL queries differs significantly from the logical order in which SQL query operations are executed. It's important to understand and remember the SQL query structure and logical order of operations, as this knowledge is essential for writing effective SQL queries. The logical order does not necessarily match the execution order, as query optimizers may rearrange operations for better performance, such as executing the WHERE clause before the JOIN clause.</span>
-
+<span style="color:green;">Writing SQL queries differs significantly from the logical order in which SQL query operations are executed. It's important to understand and remember the SQL query structure and logical order of operations, as this knowledge is essential for writing effective SQL queries. The logical order does not necessarily match the execution order, as query optimizers may rearrange operations for better performance, such as executing the WHERE clause before the JOIN clause. If you are using window functions in your query, window functions happen after <b>HAVING</b> and before <b>SELECT</b>. This ordering explains an important limitation: You cannot reference window functions in your <b>WHERE</b> clause. For example, this query will fail:
+```
+SELECT 
+    department,
+    employee_name,
+    salary,
+    RANK() OVER (PARTITION BY department ORDER BY salary DESC) as salary_rank
+FROM employees
+WHERE salary_rank < 3  -- This causes an error!
+```
+</span>
 I will discuss the syntax of the most commonly used data manipulation commands, data types, and other essential SQL concepts. 
 
 **Note: Everything written after `--` is a comment and will not be executed as SQL code.**
