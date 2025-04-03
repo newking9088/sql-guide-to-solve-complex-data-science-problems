@@ -741,7 +741,12 @@ WHERE customers.status = 'active';
 ```
 
 ##### UNION
-If tables have the same structure (same number of columns, same names and the same order of columns) and you want to stack their rows on top of each other (removing duplicates by default), you can use `UNION`.
+`UNION` combines results from multiple `SELECT` statements with matching column counts and compatible data types, regardless of column names. The result uses column names from the first `SELECT` statement, and by default eliminates duplicate rows (use `UNION ALL` to keep duplicates). When combining tables with different column names or orders, `UNION` matches columns by position, not by name, meaning the first column in each SELECT statement is paired together, the second column with the second, and so on. Only one `ORDER BY` clause is allowed, which must appear at the end of the entire `UNION` query to sort the final combined result set, unless you're working with subqueries that have their own internal sorting.
+
+When `UNION` pairs columns with different data types, the database engine attempts to perform an implicit type conversion (type casting) based on data type precedence rules. Here's what typically happens: The database will try to convert the lower precedence data type to the higher precedence data type. For example, if one column is `INTEGER` and the other is `VARCHAR`, the `INTEGER` values might be converted to `VARCHAR`. If the conversion is possible without data loss, the `UNION` will proceed. If the conversion isn't possible or would result in data loss/errors, the database will raise an error.
+
+Different database systems have different type precedence hierarchies and conversion rules. For instance, SQL Server, PostgreSQL, MySQL, and Oracle all have their own specific rules about which data types take precedence.
+
 ```sql
 SELECT employee_id, name, department
 FROM employees
