@@ -1033,7 +1033,7 @@ SELECT Location, SUM(Price) AS 'Total Sales'
 FROM Sales
 GROUP BY Location;
 ```
-What if we only want Location where the `Total Sales` is greater than 2620? Use `HAVING` after `GROUP BY` because want to filter group results.
+What if we only want Location where the `Total Sales` is greater than 2610? Use `HAVING` after `GROUP BY` because want to filter group results.
 ```sql
 SELECT Location, SUM(Price) AS 'Total Sales'
 FROM Sales
