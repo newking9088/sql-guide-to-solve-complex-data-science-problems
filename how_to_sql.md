@@ -1205,7 +1205,7 @@ Window functions are different from aggregate functions like `SUM()` or `AVG()` 
 
 ## Syntax
 ```sql
-WINDOW_FUNCTION(column) OVER (
+WINDOW_FUNCTION([column]) OVER (
     [PARTITION BY partition_expression]
     [ORDER BY sort_expression [ASC | DESC]]
     [ROWS | RANGE clause]
