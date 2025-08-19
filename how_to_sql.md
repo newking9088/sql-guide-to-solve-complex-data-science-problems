@@ -978,7 +978,11 @@ By following this convention:
 
 👉 **Rule of Thumb:** Always keep the row-preserving table on the left and use `LEFT JOIN`.
 .</span>
- - <span style = "color:green; font-weight:bold; font-size:20px;"> When you use a `LEFT JOIN`, you return all rows from the left table, and if the right table does not have matching rows, it returns `NULL`. When you want `NULL` values from the right table if the rows do not match based on the join column (usually the smaller table in terms of the column you join on), you should use `LEFT JOIN`. If you want `NULL` values from both tables, use a `FULL OUTER JOIN`.</span>
+ - <span style = "color:green; font-weight:bold; font-size:20px;"> When you use a `LEFT JOIN`, **all rows from the row-preserving table** (the left table) are returned. If the non-row-preserving table (the right table) does not have matching rows, the result will show `NULL` for those columns.  
+
+	- Use `LEFT JOIN` when you want to retain all rows from the **row-preserving table** and get `NULL` for unmatched rows from the **non-row-preserving table**.  
+	- Use `FULL OUTER JOIN` when you want to include `NULL` values from **both the row-preserving and non-row-preserving tables** for rows that do not match.  
+.</span>
 - <span style = "color:green; font-weight:bold; font-size:20px;">  Use `INNER JOIN` when you want to return only the rows that have matching values in both tables. This is useful when you need to find records that exist in both tables.</span>
 
 ### AGGREGATIONS AND GROUPING
