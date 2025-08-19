@@ -968,7 +968,16 @@ ON a.user_id = b.user_id;
 
 ##### JOIN Takeaways:
 
- - <span style = "color:green; font-weight:bold; font-size:20px;"> You never have to use `RIGHT JOIN` if you prefer. The rule of thumb is to use `LEFT JOIN` where the larger table based on the [common] column to join on, the table for which you want all information from, is on the left and the smaller table, the table for which we want only information common with a larger table, is on the right. This makes the query more intuitive and easier to read.</span>
+ - <span style = "color:green; font-weight:bold; font-size:20px;"> When writing SQL joins, always structure your query so that the **row-preserving table** (the table whose rows you want to retain regardless of matches) is placed on the **left**. The **non-row-preserving table** (the table that contributes only rows that match on the join condition) should be placed on the **right**.
+
+By following this convention:
+
+		- **Queries become more intuitive** — the main data source is always visible on the left.  
+		- **Code is more consistent** — you don’t need to switch between `LEFT JOIN` and `RIGHT JOIN`.  
+		- **The intent is clear** — readers can easily identify which dataset is being fully preserved.
+
+👉 **Rule of Thumb:** Always keep the row-preserving table on the left and use `LEFT JOIN`.
+.</span>
  - <span style = "color:green; font-weight:bold; font-size:20px;"> When you use a `LEFT JOIN`, you return all rows from the left table, and if the right table does not have matching rows, it returns `NULL`. When you want `NULL` values from the right table if the rows do not match based on the join column (usually the smaller table in terms of the column you join on), you should use `LEFT JOIN`. If you want `NULL` values from both tables, use a `FULL OUTER JOIN`.</span>
 - <span style = "color:green; font-weight:bold; font-size:20px;">  Use `INNER JOIN` when you want to return only the rows that have matching values in both tables. This is useful when you need to find records that exist in both tables.</span>
 
